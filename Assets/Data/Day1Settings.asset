@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fe24450d08e5e84fb4da211850f36c0, type: 3}
+  m_Name: Day1Settings
+  m_EditorClassIdentifier: Assembly-CSharp::LandfillDaySettings
+  startMoney: 100
+  timeLimitSeconds: 150
+  wrongPickPenaltySeconds: 20
+  tableCapacity: 14
+  trucks:
+  - entries:
+    - item: {fileID: 11400000, guid: 04cd5c874e537ac4fb1de78dad0e74bc, type: 2}
+      count: 9
+    - item: {fileID: 11400000, guid: da103e0a83859dc4aafa988a72923dfd, type: 2}
+      count: 3
+    - item: {fileID: 11400000, guid: ee631a405219a0f439b0320c67c20aa8, type: 2}
+      count: 1
+    - item: {fileID: 11400000, guid: ba2e499406b2fb4449a16b5cc5858000, type: 2}
+      count: 2
+    - item: {fileID: 11400000, guid: 619ab65ef1c6ec641b07877cc69d8b87, type: 2}
+      count: 1
+  - entries:
+    - item: {fileID: 11400000, guid: 04cd5c874e537ac4fb1de78dad0e74bc, type: 2}
+      count: 13
+    - item: {fileID: 11400000, guid: da103e0a83859dc4aafa988a72923dfd, type: 2}
+      count: 4
+    - item: {fileID: 11400000, guid: ee631a405219a0f439b0320c67c20aa8, type: 2}
+      count: 2
+    - item: {fileID: 11400000, guid: ba2e499406b2fb4449a16b5cc5858000, type: 2}
+      count: 2
+    - item: {fileID: 11400000, guid: 619ab65ef1c6ec641b07877cc69d8b87, type: 2}
+      count: 1
+    - item: {fileID: 11400000, guid: 71fbfd74f0cc00e40aa33a2f1cbd7ddb, type: 2}
+      count: 1
+    - item: {fileID: 11400000, guid: d89d97d07b46a5440aebee2cca27a39c, type: 2}
+      count: 1
+  secondsBeforeTruck: 6
+  dumpInterval: 0.6
+  throwVelocity: {x: 1.5, y: 0}
+  throwSpin: 0.3
+  targetDescription: A red toolbox. Big, heavy, metal.
