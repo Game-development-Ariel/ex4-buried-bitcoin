@@ -38,7 +38,7 @@ public static class LandfillSceneBuilder
         LandfillDaySettings day = LandfillAssets.DaySettings();
 
         Collider2D belt = CreateBelt();
-        CreateWasteAndWalls();
+        CreateWasteAndWalls(day);
         MachineSlot[] slots = CreateSlots(belt);
         TruckDumper dumper = CreateDumper(day);
 
@@ -91,13 +91,13 @@ public static class LandfillSceneBuilder
     /// The waste pit under the belt, the hood above it (where the blower throws light items),
     /// and the walls that keep the items inside the plant.
     /// </summary>
-    private static void CreateWasteAndWalls()
+    private static void CreateWasteAndWalls(LandfillDaySettings day)
     {
         var parent = new GameObject("Plant").transform;
 
         SceneParts.CreateBox("Pit Background", parent, new Vector2(-2.4f, -1f), new Vector2(12.2f, 2.9f), Dirt, 0);
-        AddWastePile(SceneParts.CreateBox("Waste Pit", parent, new Vector2(-2.4f, -2.45f), new Vector2(12.2f, 0.3f), Dirt * 0.7f, 1));
-        AddWastePile(SceneParts.CreateBox("Waste Hood", parent, new Vector2(-2.45f, 4.25f), new Vector2(11.9f, 0.25f), Metal, 1));
+        AddWastePile(day, SceneParts.CreateBox("Waste Pit", parent, new Vector2(-2.4f, -2.45f), new Vector2(12.2f, 0.3f), Dirt * 0.7f, 1));
+        AddWastePile(day, SceneParts.CreateBox("Waste Hood", parent, new Vector2(-2.45f, 4.25f), new Vector2(11.9f, 0.25f), Metal, 1));
         SceneParts.CreateLabel("WASTE", parent, new Vector2(-2.4f, -1.5f), 0.5f, LabelColor * 0.7f);
 
         AddWall(parent, "Left Wall", new Vector2(-8.5f, 1f), new Vector2(0.2f, 7f));
@@ -105,10 +105,12 @@ public static class LandfillSceneBuilder
         AddWall(parent, "Table Wall", new Vector2(8.4f, 0.4f), new Vector2(0.2f, 4.3f));
     }
 
-    private static void AddWastePile(GameObject box)
+    private static void AddWastePile(LandfillDaySettings day, GameObject box)
     {
         box.AddComponent<BoxCollider2D>();
-        SetupTools.SetField(box.AddComponent<WastePile>(), "targetLost", LandfillAssets.TargetLost);
+        WastePile pile = box.AddComponent<WastePile>();
+        SetupTools.SetField(pile, "settings", day);
+        SetupTools.SetField(pile, "targetLost", LandfillAssets.TargetLost);
     }
 
     private static void AddWall(Transform parent, string name, Vector2 center, Vector2 size)

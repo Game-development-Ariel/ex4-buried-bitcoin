@@ -59,7 +59,7 @@ public class SortingTable : MonoBehaviour
         {
             return;
         }
-        if (Selected.Data.isTarget)
+        if (Selected.Data == settings.target)
         {
             targetLost.Raise();
         }
@@ -72,7 +72,7 @@ public class SortingTable : MonoBehaviour
         {
             return;
         }
-        if (Selected.Data.isTarget)
+        if (Selected.Data == settings.target)
         {
             targetLost.Raise(); // Sold for scrap by mistake.
         }
@@ -86,7 +86,7 @@ public class SortingTable : MonoBehaviour
         {
             return;
         }
-        if (Selected.Data.isTarget)
+        if (Selected.Data == settings.target)
         {
             targetFound.Raise();
         }

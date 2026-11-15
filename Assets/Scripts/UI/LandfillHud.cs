@@ -99,7 +99,7 @@ public class LandfillHud : MonoBehaviour
 
         Text description = UiFactory.CreateText(card.transform, "Description", TopLeft, new Vector2(440f, 60f), 26, TextAnchor.UpperLeft);
         description.rectTransform.anchoredPosition = new Vector2(24f, -48f);
-        description.text = settings.targetDescription;
+        description.text = settings.target.description;
     }
 
     private void ShowMoney(int money)

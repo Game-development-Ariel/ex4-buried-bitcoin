@@ -47,4 +47,4 @@ MonoBehaviour:
   dumpInterval: 0.6
   throwVelocity: {x: 1.5, y: 0}
   throwSpin: 0.3
-  targetDescription: A red toolbox. Big, heavy, metal.
+  target: {fileID: 11400000, guid: d89d97d07b46a5440aebee2cca27a39c, type: 2}

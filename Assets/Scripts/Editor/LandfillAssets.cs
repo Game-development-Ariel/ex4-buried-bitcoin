@@ -19,7 +19,7 @@ public static class LandfillAssets
     public static GameEvent DayWon => SetupTools.Asset<GameEvent>(Folder + "Events/DayWon.asset");
     public static TextEvent DayLost => SetupTools.Asset<TextEvent>(Folder + "Events/DayLost.asset");
 
-    public static TrashItemData Item(string name, Color color, float size, float mass, bool isSmall, int sellPrice, bool isTarget = false)
+    public static TrashItemData Item(string name, Color color, float size, float mass, bool isSmall, int sellPrice, string description = "")
     {
         string path = Folder + "Items/" + name.Replace(" ", "") + ".asset";
         bool isNew = !File.Exists(path);
@@ -32,7 +32,7 @@ public static class LandfillAssets
             item.mass = mass;
             item.isSmall = isSmall;
             item.sellPrice = sellPrice;
-            item.isTarget = isTarget;
+            item.description = description;
             EditorUtility.SetDirty(item);
         }
         return item;
@@ -71,13 +71,14 @@ public static class LandfillAssets
         TrashItemData can = Item("Tin can", new Color(0.72f, 0.74f, 0.78f), 0.45f, 1f, false, 10);
         TrashItemData scrap = Item("Copper scrap", new Color(0.82f, 0.48f, 0.25f), 0.6f, 2f, false, 30);
         TrashItemData rustyBox = Item("Rusty box", new Color(0.55f, 0.27f, 0.16f), 0.85f, 2f, false, 5);
-        TrashItemData toolbox = Item("Red toolbox", new Color(0.85f, 0.12f, 0.1f), 0.95f, 3f, false, 0, true);
+        TrashItemData toolbox = Item("Red toolbox", new Color(0.85f, 0.12f, 0.1f), 0.95f, 3f, false, 0, "A red toolbox. Big, heavy, metal.");
 
         day.trucks = new[]
         {
             Load((dirt, 9), (bag, 3), (bottle, 1), (can, 2), (scrap, 1)),
             Load((dirt, 13), (bag, 4), (bottle, 2), (can, 2), (scrap, 1), (rustyBox, 1), (toolbox, 1)),
         };
+        day.target = toolbox;
         EditorUtility.SetDirty(day);
         return day;
     }

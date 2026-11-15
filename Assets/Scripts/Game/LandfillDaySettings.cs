@@ -27,7 +27,7 @@ public class LandfillDaySettings : ScriptableObject
     public Vector2 throwVelocity = new Vector2(1.5f, 0f);
     public float throwSpin = 0.3f;
 
-    [Header("Target card")]
-    [TextArea]
-    public string targetDescription = "A red toolbox. Big, heavy, metal.";
+    [Header("Target")]
+    [Tooltip("The item the city asked us to find today. Its description is shown on the target card")]
+    public TrashItemData target;
 }

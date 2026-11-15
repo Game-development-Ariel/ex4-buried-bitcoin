@@ -7,6 +7,7 @@ using UnityEngine;
 [RequireComponent(typeof(Collider2D))]
 public class WastePile : MonoBehaviour
 {
+    [SerializeField] private LandfillDaySettings settings;
     [SerializeField] private GameEvent targetLost;
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -17,7 +18,7 @@ public class WastePile : MonoBehaviour
             return;
         }
 
-        if (item.Data.isTarget)
+        if (item.Data == settings.target)
         {
             targetLost.Raise();
         }

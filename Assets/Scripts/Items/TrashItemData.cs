@@ -20,6 +20,7 @@ public class TrashItemData : ScriptableObject
     [Tooltip("Dollars for selling it at the sorting table")]
     public int sellPrice;
 
-    [Tooltip("The thing the city asked us to find today")]
-    public bool isTarget;
+    [Tooltip("Shown on the target card on a day when this item is the target")]
+    [TextArea]
+    public string description;
 }
