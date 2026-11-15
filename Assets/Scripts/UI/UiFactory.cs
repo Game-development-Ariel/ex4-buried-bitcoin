@@ -40,7 +40,7 @@ public static class UiFactory
         Place(textObject.GetComponent<RectTransform>(), anchor, Vector2.zero, size);
 
         Text text = textObject.GetComponent<Text>();
-        text.font = UiTheme.ThoughtFont;
+        text.font = UiTheme.TextFont;
         text.fontSize = fontSize;
         text.alignment = alignment;
         text.color = UiTheme.TextColor;
