@@ -16,6 +16,14 @@ public class ScreenFader : MonoBehaviour
 
     private static bool isFading;
 
+    // Domain reload is off in the project settings, so a static keeps its value from the last Play.
+    // If Play was stopped in the middle of a fade, isFading would stay true and block every fade after it.
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void ResetStatics()
+    {
+        isFading = false;
+    }
+
     public static void FadeAndLoad(string scene)
     {
         if (isFading)
