@@ -56,14 +56,14 @@ public static class LandfillAssets
     }
 
     /// <summary>
-    /// Every MachineData asset in the project, cheapest first. The shop shows all of them,
+    /// Every MachineData asset in the project, most expensive first. The shop shows all of them,
     /// so a new machine is only a new asset and its prefab.
     /// </summary>
     public static MachineData[] AllMachines()
     {
         return AssetDatabase.FindAssets("t:MachineData")
             .Select(guid => AssetDatabase.LoadAssetAtPath<MachineData>(AssetDatabase.GUIDToAssetPath(guid)))
-            .OrderBy(machine => machine.price)
+            .OrderByDescending(machine => machine.price) // The sieve first, like in the level design.
             .ThenBy(machine => machine.displayName)
             .ToArray();
     }
