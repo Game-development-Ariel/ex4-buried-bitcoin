@@ -8,7 +8,7 @@ public class Sieve : MonoBehaviour
 {
     private Collider2D belt;
 
-    // Awake and not Start: an item can touch the trigger in the same frame the sieve is installed, before Start.
+    // Awake runs the moment the sieve is created inside the slot, so the belt is known before any trigger can happen.
     private void Awake()
     {
         belt = GetComponentInParent<MachineSlot>().Belt;
