@@ -9,7 +9,7 @@ public class LandfillRound : MonoBehaviour
     [SerializeField] private LandfillDaySettings settings;
     [SerializeField] private DayTimer timer;
 
-    [Tooltip("Turned off when the day ends: the belt, the truck, the timer and the clicks. Items already moving settle by themselves")]
+    [Tooltip("Turned off when the day ends, so nothing keeps moving behind the end panel")]
     [SerializeField] private Behaviour[] stopWhenDayEnds;
 
     [Header("Listens to")]
@@ -19,7 +19,7 @@ public class LandfillRound : MonoBehaviour
 
     [Header("Raises")]
     [SerializeField] private GameEvent dayWon;
-    [SerializeField] private DayLostEvent dayLost;
+    [SerializeField] private TextEvent dayLost;
 
     private bool ended;
 
@@ -51,7 +51,7 @@ public class LandfillRound : MonoBehaviour
     {
         if (End())
         {
-            dayLost.Raise(LossReason.TargetBuried);
+            dayLost.Raise("The target went to the waste pile. It is buried again.");
         }
     }
 
@@ -59,13 +59,13 @@ public class LandfillRound : MonoBehaviour
     {
         if (End())
         {
-            dayLost.Raise(LossReason.TimeUp);
+            dayLost.Raise("The work day is over, and the target is still somewhere in the trash.");
         }
     }
 
     private void PunishWrongPick()
     {
-        timer.Subtract(settings.wrongPickPenaltySeconds);
+        timer.Lose(settings.wrongPickPenaltySeconds);
     }
 
     /// <summary>Marks the day as ended. Returns false if it had already ended, so only the first result counts.</summary>

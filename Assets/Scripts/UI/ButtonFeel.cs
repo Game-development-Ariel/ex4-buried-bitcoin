@@ -9,7 +9,6 @@ public class ButtonFeel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 {
     private const float HoverScale = 1.04f;
     private const float PressedScale = 0.97f;
-    private const float ClickVolume = 0.6f;
 
     // How fast the size follows the goal. Higher = snappier.
     private const float Speed = 18f;
@@ -35,7 +34,7 @@ public class ButtonFeel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     public void OnPointerDown(PointerEventData eventData)
     {
         goalScale = PressedScale;
-        Sfx.Play("Click", ClickVolume);
+        Sfx.Play("Click", 0.6f);
     }
 
     public void OnPointerUp(PointerEventData eventData)

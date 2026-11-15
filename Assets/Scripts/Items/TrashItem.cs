@@ -12,7 +12,7 @@ public class TrashItem : MonoBehaviour, IClickable
 
     public TrashItemData Data { get; private set; }
 
-    /// <summary>Happens when the player clicks the item. TableContents listens while the item is on the table.</summary>
+    /// <summary>Happens when the player clicks the item. The sorting table listens while the item is on it.</summary>
     public event Action<TrashItem> Clicked;
 
     public void Setup(TrashItemData data)

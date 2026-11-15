@@ -8,8 +8,7 @@ public class Sieve : MonoBehaviour
 {
     private Collider2D belt;
 
-    // Awake runs the moment the sieve is created inside the slot, so the belt is known before any trigger can happen.
-    private void Awake()
+    private void Start()
     {
         belt = GetComponentInParent<MachineSlot>().Belt;
     }

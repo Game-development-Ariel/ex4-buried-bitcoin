@@ -1,18 +1,15 @@
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 /// <summary>
-/// The Tools menu: rebuilds the scene of the game, and builds the game for the browser.
+/// Rebuilds the scene of the game from the setup tools, and builds the game for the browser.
 /// The methods are public so they can also run from the command line (Unity -batchmode -executeMethod).
 /// </summary>
 public static class ProjectBuilder
 {
     private const string ScenePath = "Assets/Scenes/Landfill.unity";
 
-    // Outside the project folder, so the build never ends up in git.
-    private const string WebGLFolder = "../ex4-webgl-builds/ex4-buried-bitcoin";
-
-    /// <summary>Builds the scene, the prefabs and the data, and makes the scene the one the game starts in.</summary>
     [MenuItem("Tools/Rebuild Scene")]
     public static void BuildScene()
     {
@@ -22,7 +19,7 @@ public static class ProjectBuilder
         AssetDatabase.SaveAssets();
     }
 
-    /// <summary>Builds the game for the browser into ex4-webgl-builds next to the project folder, ready to zip and upload to itch.io.</summary>
+    /// <summary>Builds the game for the browser into Build/WebGL, ready to zip and upload to itch.io.</summary>
     [MenuItem("Tools/Build WebGL")]
     public static void BuildWebGL()
     {
@@ -33,7 +30,7 @@ public static class ProjectBuilder
         var options = new BuildPlayerOptions
         {
             scenes = new[] { ScenePath },
-            locationPathName = WebGLFolder,
+            locationPathName = "Build/WebGL",
             target = BuildTarget.WebGL,
         };
         Debug.Log("WebGL build: " + BuildPipeline.BuildPlayer(options).summary.result);

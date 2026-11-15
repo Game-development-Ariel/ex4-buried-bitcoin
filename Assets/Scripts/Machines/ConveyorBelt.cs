@@ -2,12 +2,13 @@ using UnityEngine;
 
 /// <summary>
 /// The moving belt. A SurfaceEffector2D pushes everything that lies on it.
-/// The belt stops while the sorting table is full, and when the component is turned off.
+/// The belt stops while the sorting table is full.
 /// </summary>
 [RequireComponent(typeof(SurfaceEffector2D))]
 public class ConveyorBelt : MonoBehaviour
 {
-    [SerializeField] private LandfillDaySettings settings;
+    [Tooltip("World units per second")]
+    [SerializeField] private float speed = 2.5f;
 
     [Header("Listens to")]
     [SerializeField] private GameEvent tableFull;
@@ -27,17 +28,15 @@ public class ConveyorBelt : MonoBehaviour
         tableHasRoom.Subscribe(Run);
     }
 
-    // The round turns the belt off when the day ends, and a turned-off belt must not keep pushing.
     private void OnDisable()
     {
         tableFull.Unsubscribe(Stop);
         tableHasRoom.Unsubscribe(Run);
-        Stop();
     }
 
     private void Run()
     {
-        effector.speed = settings.beltSpeed;
+        effector.speed = speed;
     }
 
     private void Stop()

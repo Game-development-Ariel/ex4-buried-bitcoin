@@ -2,8 +2,8 @@ using System;
 using UnityEngine;
 
 /// <summary>
-/// Turns clicks on the machine slots into trades: an empty slot buys the machine picked in the shop,
-/// and a slot with a machine sells it back for part of the price.
+/// Buying and selling machines: the player picks a machine, then clicks an empty slot to install it.
+/// Clicking a slot that has a machine sells it back for half the price.
 /// </summary>
 public class MachineShop : MonoBehaviour
 {
@@ -18,15 +18,8 @@ public class MachineShop : MonoBehaviour
 
     public event Action SelectionChanged;
 
-    /// <summary>Why a click on a slot did nothing.</summary>
-    public enum Refusal
-    {
-        NothingPicked,
-        NotEnoughMoney,
-    }
-
-    /// <summary>Happens when a click can't be done. Gives the reason, and the UI chooses the words.</summary>
-    public event Action<Refusal> Refused;
+    /// <summary>Happens when a click can't be done. Gives a short reason to show the player.</summary>
+    public event Action<string> Refused;
 
     private void OnEnable()
     {
@@ -59,11 +52,11 @@ public class MachineShop : MonoBehaviour
         }
         else if (Selected == null)
         {
-            Refused?.Invoke(Refusal.NothingPicked);
+            Refused?.Invoke("Pick a machine in the shop first.");
         }
         else if (!wallet.TrySpend(Selected.price))
         {
-            Refused?.Invoke(Refusal.NotEnoughMoney);
+            Refused?.Invoke($"Not enough money for the {Selected.displayName}. Sell something first.");
         }
         else
         {

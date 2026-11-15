@@ -7,8 +7,6 @@ using UnityEngine;
 public class MachineData : ScriptableObject
 {
     public string displayName = "Machine";
-
-    [Tooltip("Dollars it costs in the shop. Selling it gives back part of this")]
     public int price = 100;
 
     [Tooltip("One short line for the shop: what the machine removes from the belt")]

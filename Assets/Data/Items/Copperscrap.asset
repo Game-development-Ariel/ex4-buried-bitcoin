@@ -18,4 +18,4 @@ MonoBehaviour:
   mass: 2
   isSmall: 0
   sellPrice: 30
-  description: 
+  isTarget: 0
