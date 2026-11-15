@@ -7,11 +7,28 @@ using UnityEngine.UI;
 /// </summary>
 public class TablePanel : MonoBehaviour
 {
-    private const int CanvasSortingOrder = 10;
+    private const int StatusFontSize = 24;
+    private const int ButtonFontSize = 32;
+    private const float ButtonHeight = 70f;
+    private const float ButtonY = 100f;
+
+    // How see-through the buttons are while nothing is selected.
+    private const float DimmedAlpha = 0.35f;
+
+    // The buttons are placed from the right edge of the screen: x of the center, and width.
+    private const float WasteX = -905f;
+    private const float WasteWidth = 190f;
+    private const float SellX = -705f;
+    private const float SellWidth = 190f;
+    private const float TargetX = -410f;
+    private const float TargetWidth = 380f;
 
     private static readonly Vector2 BottomRight = new Vector2(1f, 0f);
+    private static readonly Vector2 StatusSize = new Vector2(760f, 36f);
+    private static readonly Vector2 StatusPosition = new Vector2(-200f, 150f);
 
-    [SerializeField] private SortingTable table;
+    [SerializeField] private TableContents table;
+    [SerializeField] private SortingDecisions decisions;
 
     private Text status;
     private Text sellLabel;
@@ -20,11 +37,11 @@ public class TablePanel : MonoBehaviour
     private void Awake()
     {
         UiFactory.EnsureEventSystem();
-        Canvas canvas = UiFactory.CreateCanvas("Table Canvas", CanvasSortingOrder);
+        Canvas canvas = UiFactory.CreateCanvas("Table Canvas", UiTheme.HudLayer);
         canvas.transform.SetParent(transform, false);
 
-        status = UiFactory.CreateText(canvas.transform, "Status", BottomRight, new Vector2(760f, 36f), 24, TextAnchor.MiddleRight);
-        status.rectTransform.anchoredPosition = new Vector2(-200f, 150f);
+        status = UiFactory.CreateText(canvas.transform, "Status", BottomRight, StatusSize, StatusFontSize, TextAnchor.MiddleRight);
+        status.rectTransform.anchoredPosition = StatusPosition;
         status.color = UiTheme.Muted;
 
         // The buttons share one CanvasGroup, so they are dimmed and turned off together.
@@ -33,21 +50,23 @@ public class TablePanel : MonoBehaviour
         UiFactory.Stretch((RectTransform)group.transform);
         buttons = group.GetComponent<CanvasGroup>();
 
-        AddButton("Waste", -905f, 190f).onClick.AddListener(table.ThrowSelectedToWaste);
-        Button sell = AddButton("Sell", -705f, 190f);
-        sell.onClick.AddListener(table.SellSelected);
+        AddButton("Waste", WasteX, WasteWidth).onClick.AddListener(decisions.ThrowSelectedToWaste);
+        Button sell = AddButton("Sell", SellX, SellWidth);
+        sell.onClick.AddListener(decisions.SellSelected);
         sellLabel = sell.GetComponentInChildren<Text>();
-        AddButton("This is the target!", -410f, 380f).onClick.AddListener(table.MarkSelectedAsTarget);
+        AddButton("This is the target!", TargetX, TargetWidth).onClick.AddListener(decisions.MarkSelectedAsTarget);
     }
 
     private void OnEnable()
     {
         table.Changed += Refresh;
+        decisions.SelectionChanged += Refresh;
     }
 
     private void OnDisable()
     {
         table.Changed -= Refresh;
+        decisions.SelectionChanged -= Refresh;
     }
 
     private void Start()
@@ -57,16 +76,16 @@ public class TablePanel : MonoBehaviour
 
     private Button AddButton(string label, float x, float width)
     {
-        Button button = UiFactory.CreateButton(buttons.transform, label, BottomRight, new Vector2(width, 70f), 32, Color.white);
-        ((RectTransform)button.transform).anchoredPosition = new Vector2(x, 100f);
+        Button button = UiFactory.CreateButton(buttons.transform, label, BottomRight, new Vector2(width, ButtonHeight), ButtonFontSize, Color.white);
+        ((RectTransform)button.transform).anchoredPosition = new Vector2(x, ButtonY);
         return button;
     }
 
     private void Refresh()
     {
-        TrashItem selected = table.Selected;
+        TrashItem selected = decisions.Selected;
         buttons.interactable = selected != null;
-        buttons.alpha = selected != null ? 1f : 0.35f;
+        buttons.alpha = selected != null ? 1f : DimmedAlpha;
 
         string count = $"Table: {table.ItemCount} of {table.Capacity}";
         if (selected == null)

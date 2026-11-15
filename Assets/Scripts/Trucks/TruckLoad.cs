@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>
 /// What one truck carries: how many of each kind of item.
@@ -11,6 +12,8 @@ public class TruckLoad
     public class Entry
     {
         public TrashItemData item;
+
+        [Tooltip("How many of this item the truck dumps")]
         public int count = 1;
     }
 
