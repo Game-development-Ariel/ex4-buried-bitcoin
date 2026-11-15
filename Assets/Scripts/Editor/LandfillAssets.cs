@@ -76,6 +76,7 @@ public static class LandfillAssets
         LandfillDaySettings day = SetupTools.Asset<LandfillDaySettings>(path);
         if (!isNew)
         {
+            ReportMissingItems(day, path);
             return day;
         }
 
@@ -95,6 +96,29 @@ public static class LandfillAssets
         day.target = toolbox;
         EditorUtility.SetDirty(day);
         return day;
+    }
+
+    /// <summary>
+    /// The settings already exist, so they are not written again. If an item asset they point to was deleted,
+    /// the reference is empty and the game would break while playing, so say it now.
+    /// </summary>
+    private static void ReportMissingItems(LandfillDaySettings day, string path)
+    {
+        string fix = $"Set it in the Inspector, or delete {path} to create the default day again.";
+        if (day.target == null)
+        {
+            Debug.LogError($"{day.name} has no target item. {fix}", day);
+        }
+        for (int truck = 0; truck < day.trucks.Length; truck++)
+        {
+            foreach (TruckLoad.Entry entry in day.trucks[truck].entries)
+            {
+                if (entry.item == null)
+                {
+                    Debug.LogError($"Truck {truck + 1} in {day.name} has an entry with no item. {fix}", day);
+                }
+            }
+        }
     }
 
     private static TruckLoad Load(params (TrashItemData item, int count)[] entries)
