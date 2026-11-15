@@ -52,7 +52,7 @@
 
 ```
 Assets/
-├── Scripts/
+├── Scripts/        BuriedBitcoin.asmdef (the game: Input System and uGUI)
 │   ├── Trucks/     TruckDumper, TruckLoad
 │   ├── Items/      TrashItem, TrashItemData
 │   ├── Machines/   ConveyorBelt, MachineSlot, MachineData, Sieve, WastePile
@@ -65,8 +65,16 @@ Assets/
 │   │               LandfillEndPanel, ResultOverlay, ScreenFader, ButtonFeel,
 │   │               UiFactory, UiTheme, UiAnim
 │   ├── Audio/      Sfx
-│   └── Editor/     ProjectBuilder (the Tools menu), LandfillSceneBuilder, LandfillAssets,
+│   └── Editor/     BuriedBitcoin.Editor.asmdef (editor only, adds URP 2D for the light)
+│                   ProjectBuilder (the Tools menu), LandfillSceneBuilder, LandfillAssets,
 │                   SceneParts, SetupTools, PlaceholderSprites
+├── Tests/
+│   ├── Shared/     BuriedBitcoin.Tests.Shared.asmdef: TestUtils, ClickCounter
+│   ├── EditMode/   BuriedBitcoin.Tests.EditMode.asmdef (editor only)
+│   │               Events, Economy, Game, Sorting, Trucks, Items, Machines,
+│   │               Data, Scene, Editor, Architecture
+│   └── PlayMode/   BuriedBitcoin.Tests.PlayMode.asmdef
+│                   CoreLoopTests, MachineTests, LandfillScene, Components, UI, Input, Audio
 ├── Data/
 │   ├── Day1Settings   rules, belt and blower, trucks, and the target
 │   ├── Events/        TableFull, TableHasRoom, TargetFound, TargetLost, WrongPick, DayWon, DayLost
@@ -230,6 +238,54 @@ flowchart LR
 | [Sfx](Assets/Scripts/Audio/Sfx.cs) | מחלקה סטטית עם AudioSource אחד ומילון של הצלילים שכבר נטענו | הקליק של Play again צריך להמשיך גם כשהסצנה נטענת מחדש. המילון חוסך טעינה מ-Resources בכל לחיצה. אין בהם מצב של המשחק, ובין הפעלות של Play הם בטוחים: AudioSource שנהרס נוצר מחדש, וצליל שנפרק נטען מחדש |
 | [ScreenFader](Assets/Scripts/UI/ScreenFader.cs) | `FadeAndLoad` סטטית ודגל `isFading` | המסך השחור חייב לשרוד את טעינת הסצנה כדי להתבהר אחריה. הדגל מונע טעינה כפולה. ב-Project Settings כבוי ה-Domain Reload, אז משתנה סטטי לא מתאפס לבד בין הפעלות של Play. לכן `ResetStatics` עם `[RuntimeInitializeOnLoadMethod(SubsystemRegistration)]` מאפס את הדגל בתחילת כל הפעלה |
 | UiFactory, UiAnim, UiTheme, ResultOverlay | מחלקות סטטיות של פונקציות עזר וקבועים | אין בהן מצב |
+
+## בדיקות
+
+יש בדיקות אוטומטיות לכל הקוד, בתיקייה `Assets/Tests`. **מריצים את כל הבדיקות לפני כל מיזוג (merge) ל-main**, ומתקנים את מה שנכשל לפני שממשיכים. אם בדיקה נכשלת בגלל תקלה במשחק, מתקנים את המשחק ולא את הבדיקה.
+
+יש שני סוגים:
+
+* **EditMode**: בודקות בלי להפעיל את המשחק, ולכן הן מהירות (כמה שניות). הן בודקות את הלוגיקה של כל מחלקה לבד (הארנק, השעון, החנות, השולחן, ההחלטות, חוקי היום, המשאיות), את הנכסים ב-`Assets/Data` (שהם נטענים ושהמספרים הגיוניים), את החיבורים בסצנה ובפריפאבים (אין סקריפט חסר ואין שדה ריק), ואת `Tools > Rebuild Scene` (הבדיקה בונה את הסצנה פעמיים ומחזירה את הקבצים כמו שהיו).
+* **PlayMode**: מפעילות את המשחק עצמו. רובן טוענות את הסצנה `Landfill` ושמות פריטים במקום מסוים, כדי שהתוצאה לא תהיה תלויה בזריקות האקראיות של המשאית: משאית שופכת והפריט מגיע לשולחן, נפה מפילה פריט קטן, מפוח מרים פריט קל, שולחן מלא עוצר את הקו וממשיך רק אחרי שני מקומות, מציאת המטרה, הפסד בזמן, פריט שבורח מהמתקן, ו-Play again. השאר בודקות כל רכיב ממשק לבד (HUD, חנות, שולחן, מסך הסיום, כפתורים, צלילים) ואת הלחיצה בעכבר (עם עכבר מדומה של ה-Input System). כל שגיאה שנכתבת ל-Console בזמן בדיקה מכשילה אותה.
+
+**בדיקות ארכיטקטורה** (בתוך EditMode, בקובץ [ArchitectureTests.cs](Assets/Tests/EditMode/Architecture/ArchitectureTests.cs)) קוראות את קובצי הקוד ובודקות את הכללים של הקורס ושל ה-README הזה:
+
+* קוד המשחק לא משתמש באף מחלקה מ-`UI`, ולא כותב משפטים לשחקן.
+* כל הרשמה ב-`OnEnable` מבוטלת ב-`OnDisable`. ההרשמה היחידה מחוץ ל-`OnEnable` היא של TableContents לפריט שעל השולחן (ראו "יחסי המחלקות").
+* אין סינגלטון, וכל משתנה סטטי שמשתנה מופיע בטבלה "סינגלטון ומשתנים סטטיים".
+* בכל קובץ יש מחלקה אחת, בשם של הקובץ.
+* לכל מספר שמכווננים ב-Inspector יש Tooltip, חוץ מרשימה קצרה של שמות שמסבירים את עצמם.
+* ה-README מזכיר כל מחלקה וכל תיקייה של קוד.
+
+כשבדיקת ארכיטקטורה נכשלת, או שמתקנים את הקוד, או שהחריגה מכוונת: אז מוסיפים אותה לרשימת החריגות בבדיקה ומסבירים אותה כאן.
+
+**ביוניטי:** `Window > General > Test Runner`, בוחרים את הלשונית EditMode ולוחצים Run All, ואחר כך את הלשונית PlayMode ו-Run All.
+
+**משורת הפקודה** (כשיוניטי סגור, מתיקיית הפרויקט; ב-Windows הנתיב ל-Unity שונה). לא מוסיפים `-quit`, כי `-runTests` סוגר את יוניטי בעצמו:
+
+<div dir="ltr">
+
+```
+UNITY=/Applications/Unity/Hub/Editor/6000.3.25f1/Unity.app/Contents/MacOS/Unity
+$UNITY -batchmode -projectPath . -runTests -testPlatform EditMode -testResults ../results-editmode.xml
+$UNITY -batchmode -projectPath . -runTests -testPlatform PlayMode -testResults ../results-playmode.xml
+```
+
+</div>
+
+הסיכום נמצא בשורה הראשונה של קובץ ה-XML (`total`, `passed`, `failed`). שתי הריצות יחד לוקחות בערך דקה.
+
+**כיסוי קוד** (כמה משורות המשחק הבדיקות מריצות): מוסיפים לשתי הפקודות
+
+<div dir="ltr">
+
+```
+-enableCodeCoverage -coverageResultsPath ../coverage -coverageOptions "generateHtmlReport;generateAdditionalMetrics;assemblyFilters:+BuriedBitcoin"
+```
+
+</div>
+
+ופותחים בדפדפן את `../coverage/Report/index.html`. הדוח מאחד את שתי הריצות. אפשר גם ביוניטי: `Window > Analysis > Code Coverage`. הדוח נשמר מחוץ לפרויקט כדי שלא ייכנס לגיט.
 
 ## מה השתנה לעומת מסמך השלבים
 
