@@ -264,14 +264,19 @@ public static class LandfillSceneBuilder
     {
         var ui = new GameObject("UI");
 
-        LandfillHud hud = ui.AddComponent<LandfillHud>();
-        SetupTools.SetField(hud, "settings", day);
-        SetupTools.SetField(hud, "wallet", wallet);
-        SetupTools.SetField(hud, "timer", timer);
-        SetupTools.SetField(hud, "dumper", dumper);
-        SetupTools.SetField(hud, "shop", shop);
-        SetupTools.SetField(hud, "wrongPick", LandfillAssets.WrongPick);
-        SetupTools.SetField(hud, "tableFull", LandfillAssets.TableFull);
+        HudStats stats = ui.AddComponent<HudStats>();
+        SetupTools.SetField(stats, "settings", day);
+        SetupTools.SetField(stats, "wallet", wallet);
+        SetupTools.SetField(stats, "timer", timer);
+        SetupTools.SetField(stats, "dumper", dumper);
+
+        HudMessageLine messages = ui.AddComponent<HudMessageLine>();
+        SetupTools.SetField(messages, "settings", day);
+        SetupTools.SetField(messages, "shop", shop);
+        SetupTools.SetField(messages, "wrongPick", LandfillAssets.WrongPick);
+        SetupTools.SetField(messages, "tableFull", LandfillAssets.TableFull);
+
+        SetupTools.SetField(ui.AddComponent<TargetCard>(), "settings", day);
 
         ShopBar shopBar = ui.AddComponent<ShopBar>();
         SetupTools.SetField(shopBar, "shop", shop);
