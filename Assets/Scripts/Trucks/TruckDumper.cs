@@ -8,6 +8,9 @@ using UnityEngine;
 /// </summary>
 public class TruckDumper : MonoBehaviour
 {
+    // A dumped item lies at a random angle, anywhere in one full turn (degrees).
+    private const float FullTurnDegrees = 360f;
+
     [SerializeField] private LandfillDaySettings settings;
     [SerializeField] private TrashItem itemPrefab;
 
@@ -21,6 +24,9 @@ public class TruckDumper : MonoBehaviour
 
     /// <summary>Happens when a truck starts dumping. Gives the truck's number, from 1.</summary>
     public event Action<int> TruckStarted;
+
+    /// <summary>Happens once, after the last item of the last truck was dumped.</summary>
+    public event Action AllTrucksDone;
 
     private void OnEnable()
     {
@@ -52,11 +58,12 @@ public class TruckDumper : MonoBehaviour
                 yield return new WaitForSeconds(settings.dumpInterval);
             }
         }
+        AllTrucksDone?.Invoke();
     }
 
     private void Dump(TrashItemData data)
     {
-        Quaternion tilt = Quaternion.Euler(0f, 0f, UnityEngine.Random.Range(0f, 360f));
+        Quaternion tilt = Quaternion.Euler(0f, 0f, UnityEngine.Random.Range(0f, FullTurnDegrees));
         TrashItem item = Instantiate(itemPrefab, transform.position, tilt);
         item.Setup(data);
 

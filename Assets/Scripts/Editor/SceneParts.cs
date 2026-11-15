@@ -5,24 +5,29 @@ using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 
 /// <summary>
-/// Building blocks for the scene builders of the simple games: a camera, a light,
-/// colored boxes and world labels. The games use plain shapes on purpose, there is no final art yet.
+/// Building blocks for the scene builder: a camera, a light, colored boxes and world labels.
+/// The prototype uses plain shapes on purpose, there is no final art yet.
 /// </summary>
 public static class SceneParts
 {
     private const string SquarePath = "Assets/Sprites/Shapes/Square.png";
-    private const string CirclePath = "Assets/Sprites/Shapes/Circle.png";
     private const string FontPath = "Assets/Resources/Fonts/CrimsonText.ttf";
+
+    // How far the camera stands in front of the 2D scene (which is at z = 0), in world units.
+    public const float CameraZ = -10f;
+
+    // World labels use a big font size, so the letters stay sharp.
+    // A TextMesh draws 10 font pixels per world unit, so at character size 1 the letters are
+    // LabelFontSize / 10 world units tall. characterSize = height / LabelHeightPerCharacterSize gives letters "height" units tall.
+    private const int LabelFontSize = 64;
+    private const float TextMeshPixelsPerUnit = 10f;
+    private const float LabelHeightPerCharacterSize = LabelFontSize / TextMeshPixelsPerUnit;
+
+    // Labels are drawn over every box.
+    private const int LabelSortingOrder = 20;
 
     /// <summary>A white square, one world unit wide. Tinting and scaling it gives any colored box.</summary>
     public static Sprite Square => LoadShape(SquarePath, (x, y) => Color.white);
-
-    public static Sprite Circle => LoadShape(CirclePath, (x, y) =>
-    {
-        float half = PlaceholderSprites.PixelsPerTile / 2f;
-        bool inside = new Vector2(x + 0.5f - half, y + 0.5f - half).magnitude <= half;
-        return inside ? Color.white : Color.clear;
-    });
 
     // The file is drawn and imported only the first time. After that it is just loaded.
     private static Sprite LoadShape(string path, System.Func<int, int, Color> pixelColor)
@@ -40,7 +45,7 @@ public static class SceneParts
     {
         var cameraObject = new GameObject("Main Camera", typeof(Camera), typeof(AudioListener));
         cameraObject.tag = "MainCamera";
-        cameraObject.transform.position = new Vector3(0f, 0f, -10f);
+        cameraObject.transform.position = new Vector3(0f, 0f, CameraZ);
         Camera camera = cameraObject.GetComponent<Camera>();
         camera.orthographic = true;
         camera.orthographicSize = orthographicSize;
@@ -82,15 +87,15 @@ public static class SceneParts
         TextMesh textMesh = label.AddComponent<TextMesh>();
         textMesh.text = text;
         textMesh.font = font;
-        textMesh.fontSize = 64;
-        textMesh.characterSize = height / 6.4f; // With font size 64 this makes the letters about "height" units tall.
+        textMesh.fontSize = LabelFontSize;
+        textMesh.characterSize = height / LabelHeightPerCharacterSize;
         textMesh.anchor = TextAnchor.MiddleCenter;
         textMesh.alignment = TextAlignment.Center;
         textMesh.color = color;
 
         MeshRenderer meshRenderer = label.GetComponent<MeshRenderer>();
         meshRenderer.sharedMaterial = font.material;
-        meshRenderer.sortingOrder = 20;
+        meshRenderer.sortingOrder = LabelSortingOrder;
         return textMesh;
     }
 
