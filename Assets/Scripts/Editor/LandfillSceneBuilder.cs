@@ -37,9 +37,9 @@ public static class LandfillSceneBuilder
         SceneParts.CreateGlobalLight();
         LandfillDaySettings day = LandfillAssets.DaySettings();
 
-        Collider2D belt = CreateBelt(day);
+        ConveyorBelt belt = CreateBelt(day);
         CreateWasteAndWalls(day);
-        MachineSlot[] slots = CreateSlots(belt);
+        MachineSlot[] slots = CreateSlots(belt.GetComponent<Collider2D>());
         TruckDumper dumper = CreateDumper(day);
 
         // The game logic sits on one object, each part in its own small component.
@@ -59,7 +59,7 @@ public static class LandfillSceneBuilder
         LandfillRound round = game.AddComponent<LandfillRound>();
         SetupTools.SetField(round, "settings", day);
         SetupTools.SetField(round, "timer", timer);
-        SetupTools.SetArray(round, "stopWhenDayEnds", new Object[] { dumper, timer, clicker });
+        SetupTools.SetArray(round, "stopWhenDayEnds", new Object[] { belt, dumper, timer, clicker });
         SetupTools.SetField(round, "targetFound", LandfillAssets.TargetFound);
         SetupTools.SetField(round, "targetLost", LandfillAssets.TargetLost);
         SetupTools.SetField(round, "wrongPick", LandfillAssets.WrongPick);
@@ -72,7 +72,7 @@ public static class LandfillSceneBuilder
 
     // ---------- The line ----------
 
-    private static Collider2D CreateBelt(LandfillDaySettings day)
+    private static ConveyorBelt CreateBelt(LandfillDaySettings day)
     {
         float width = BeltRight - BeltLeft;
         Vector2 center = new Vector2((BeltLeft + BeltRight) / 2f, BeltTop - BeltThickness / 2f);
@@ -85,7 +85,7 @@ public static class LandfillSceneBuilder
         SetupTools.SetField(conveyor, "settings", day);
         SetupTools.SetField(conveyor, "tableFull", LandfillAssets.TableFull);
         SetupTools.SetField(conveyor, "tableHasRoom", LandfillAssets.TableHasRoom);
-        return box;
+        return conveyor;
     }
 
     /// <summary>

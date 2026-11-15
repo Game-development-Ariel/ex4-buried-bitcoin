@@ -9,7 +9,7 @@ public class LandfillRound : MonoBehaviour
     [SerializeField] private LandfillDaySettings settings;
     [SerializeField] private DayTimer timer;
 
-    [Tooltip("Turned off when the day ends, so nothing keeps moving behind the end panel")]
+    [Tooltip("Turned off when the day ends: the belt, the truck, the timer and the clicks. Items already moving settle by themselves")]
     [SerializeField] private Behaviour[] stopWhenDayEnds;
 
     [Header("Listens to")]
