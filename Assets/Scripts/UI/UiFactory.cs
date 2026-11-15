@@ -4,7 +4,7 @@ using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
 
 /// <summary>
-/// Small helpers that create UI objects in code: a canvas, texts, panels, icons and buttons.
+/// Small helpers that create UI objects in code: a canvas, texts, panels and buttons.
 /// Everything takes its fonts, colors and sprites from UiTheme, so all the screens look the same.
 /// </summary>
 public static class UiFactory
@@ -49,14 +49,14 @@ public static class UiFactory
         text.verticalOverflow = VerticalWrapMode.Overflow;
         text.lineSpacing = 1.1f;
 
-        // A soft dark shadow keeps light text readable over the floor.
+        // A soft dark shadow keeps light text readable over the scene.
         Shadow shadow = textObject.AddComponent<Shadow>();
         shadow.effectColor = new Color(0f, 0f, 0f, 0.7f);
         shadow.effectDistance = new Vector2(2f, -2f);
         return text;
     }
 
-    /// <summary>Same as CreateText, in the serif font, centered. Used for titles and memories.</summary>
+    /// <summary>Same as CreateText, in the serif font, centered. Used for titles, big numbers and button labels.</summary>
     public static Text CreateTitle(Transform parent, string name, Vector2 anchor, Vector2 size, int fontSize, Color color)
     {
         Text text = CreateText(parent, name, anchor, size, fontSize, TextAnchor.MiddleCenter);
@@ -73,17 +73,8 @@ public static class UiFactory
         Image image = imageObject.GetComponent<Image>();
         image.sprite = sprite;
         image.color = color;
-        image.raycastTarget = false; // Only buttons and the joystick need to catch touches.
+        image.raycastTarget = false; // Only buttons need to catch clicks and touches.
         return image;
-    }
-
-    /// <summary>An icon from the UI sprites, at a fixed size.</summary>
-    public static Image CreateIcon(Transform parent, string spriteName, Vector2 size)
-    {
-        Image icon = CreateImage(parent, spriteName, UiTheme.Sprite(spriteName), Color.white);
-        icon.rectTransform.sizeDelta = size;
-        icon.preserveAspect = true;
-        return icon;
     }
 
     /// <summary>
