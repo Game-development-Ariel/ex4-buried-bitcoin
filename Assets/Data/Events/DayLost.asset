@@ -11,4 +11,4 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 895dbd5e8c563bd49b25b64f87c6ebe1, type: 3}
   m_Name: DayLost
-  m_EditorClassIdentifier: Assembly-CSharp::TextEvent
+  m_EditorClassIdentifier: Assembly-CSharp::DayLostEvent

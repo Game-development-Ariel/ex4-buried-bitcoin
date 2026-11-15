@@ -14,8 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LandfillDaySettings
   startMoney: 100
   timeLimitSeconds: 150
+  warningSeconds: 20
   wrongPickPenaltySeconds: 20
   tableCapacity: 14
+  freePlacesToRestart: 2
+  beltSpeed: 2.5
+  blowerForce: 6
   trucks:
   - entries:
     - item: {fileID: 11400000, guid: 04cd5c874e537ac4fb1de78dad0e74bc, type: 2}
@@ -47,4 +51,4 @@ MonoBehaviour:
   dumpInterval: 0.6
   throwVelocity: {x: 1.5, y: 0}
   throwSpin: 0.3
-  targetDescription: A red toolbox. Big, heavy, metal.
+  target: {fileID: 11400000, guid: d89d97d07b46a5440aebee2cca27a39c, type: 2}
