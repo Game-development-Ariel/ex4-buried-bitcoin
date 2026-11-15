@@ -106,7 +106,7 @@ Assets/
 
 ובלי אירוע בכלל: HudStats קורא את `DayTimer.SecondsLeft` בכל פריים, כי השעון משתנה כל הזמן ממילא.
 
-בתרשים: מלבן הוא מחלקה, צורה מעוגלת היא אירוע כנכס (חץ עבה), חץ מקווקו הוא אירוע רגיל של C#, וחץ רגיל הוא קריאה ישירה.
+בתרשים: מלבן הוא מחלקה, צורה מעוגלת היא אירוע כנכס (חץ עבה), חץ מקווקו הוא אירוע רגיל של C#, וחץ רגיל הוא קריאה ישירה. כמעט כל המחלקות קוראות גם את Day1Settings, ואת החצים האלה השמטנו כדי שהתרשים יהיה קריא.
 
 <div dir="ltr">
 
@@ -158,6 +158,7 @@ flowchart LR
     TruckDumper -. TruckStarted, AllTrucksDone .-> HudStats
     HudStats -- reads SecondsLeft every frame --> DayTimer
     MachineShop -. Refused + Refusal .-> HudMessageLine
+    HudMessageLine -- reads the selected machine's name --> MachineShop
     WrongPick ==> HudMessageLine
     TableFull ==> HudMessageLine
     TargetCard -- reads the target --> LandfillDaySettings[(LandfillDaySettings)]
