@@ -22,6 +22,9 @@ public class TruckDumper : MonoBehaviour
     /// <summary>Happens when a truck starts dumping. Gives the truck's number, from 1.</summary>
     public event Action<int> TruckStarted;
 
+    /// <summary>Happens once, after the last item of the last truck was dumped.</summary>
+    public event Action AllTrucksDone;
+
     private void OnEnable()
     {
         tableFull.Subscribe(Wait);
@@ -52,6 +55,7 @@ public class TruckDumper : MonoBehaviour
                 yield return new WaitForSeconds(settings.dumpInterval);
             }
         }
+        AllTrucksDone?.Invoke();
     }
 
     private void Dump(TrashItemData data)

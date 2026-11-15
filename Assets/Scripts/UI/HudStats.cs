@@ -49,12 +49,14 @@ public class HudStats : MonoBehaviour
     {
         wallet.Changed += ShowMoney;
         dumper.TruckStarted += ShowTruck;
+        dumper.AllTrucksDone += ShowNoMoreTrucks;
     }
 
     private void OnDisable()
     {
         wallet.Changed -= ShowMoney;
         dumper.TruckStarted -= ShowTruck;
+        dumper.AllTrucksDone -= ShowNoMoreTrucks;
     }
 
     private void Start()
@@ -78,5 +80,10 @@ public class HudStats : MonoBehaviour
     private void ShowTruck(int number)
     {
         truckText.text = $"Truck {number} of {dumper.TruckCount} is dumping";
+    }
+
+    private void ShowNoMoreTrucks()
+    {
+        truckText.text = "No more trucks today";
     }
 }
