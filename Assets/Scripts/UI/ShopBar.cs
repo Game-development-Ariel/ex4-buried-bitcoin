@@ -8,9 +8,22 @@ using UnityEngine.UI;
 public class ShopBar : MonoBehaviour
 {
     private const int CanvasSortingOrder = 10;
+    private const int HelpFontSize = 24;
+    private const int ButtonFontSize = 34;
+    private const int DescriptionFontSize = 20;
     private const float ButtonWidth = 400f;
+    private const float ButtonHeight = 70f;
+    private const float ButtonGap = 20f;
+    private const float LeftMargin = 40f;
+    private const float ButtonY = 100f;
 
     private static readonly Vector2 BottomLeft = new Vector2(0f, 0f);
+    private static readonly Vector2 BottomCenter = new Vector2(0.5f, 0f);
+    private static readonly Vector2 TopCenter = new Vector2(0.5f, 1f);
+    private static readonly Vector2 HelpSize = new Vector2(900f, 36f);
+    private static readonly Vector2 HelpPosition = new Vector2(LeftMargin, 150f);
+    private static readonly Vector2 DescriptionSize = new Vector2(ButtonWidth, 30f);
+    private static readonly Vector2 DescriptionOffset = new Vector2(0f, -6f);
     private static readonly Color PickedColor = new Color(1f, 0.8f, 0.45f);
 
     [SerializeField] private MachineShop shop;
@@ -24,8 +37,8 @@ public class ShopBar : MonoBehaviour
         Canvas canvas = UiFactory.CreateCanvas("Shop Canvas", CanvasSortingOrder);
         canvas.transform.SetParent(transform, false);
 
-        Text help = UiFactory.CreateText(canvas.transform, "Help", BottomLeft, new Vector2(900f, 36f), 24, TextAnchor.MiddleLeft);
-        help.rectTransform.anchoredPosition = new Vector2(40f, 150f);
+        Text help = UiFactory.CreateText(canvas.transform, "Help", BottomLeft, HelpSize, HelpFontSize, TextAnchor.MiddleLeft);
+        help.rectTransform.anchoredPosition = HelpPosition;
         help.color = UiTheme.Muted;
         help.text = "SHOP: pick a machine, then click an empty slot above the belt.";
 
@@ -34,15 +47,15 @@ public class ShopBar : MonoBehaviour
         {
             MachineData machine = machines[i]; // A copy for the click handler below.
             string label = $"{machine.displayName}  ${machine.price}";
-            Button button = UiFactory.CreateButton(canvas.transform, label, BottomLeft, new Vector2(ButtonWidth, 70f), 34, Color.white);
+            Button button = UiFactory.CreateButton(canvas.transform, label, BottomLeft, new Vector2(ButtonWidth, ButtonHeight), ButtonFontSize, Color.white);
             RectTransform rect = (RectTransform)button.transform;
-            rect.anchoredPosition = new Vector2(40f + ButtonWidth / 2f + i * (ButtonWidth + 20f), 100f);
+            rect.anchoredPosition = new Vector2(LeftMargin + ButtonWidth / 2f + i * (ButtonWidth + ButtonGap), ButtonY);
             button.onClick.AddListener(() => shop.Select(machine));
             buttonImages[i] = button.GetComponent<Image>();
 
-            Text description = UiFactory.CreateText(rect, "Description", new Vector2(0.5f, 0f), new Vector2(ButtonWidth, 30f), 20, TextAnchor.MiddleCenter);
-            description.rectTransform.pivot = new Vector2(0.5f, 1f);
-            description.rectTransform.anchoredPosition = new Vector2(0f, -6f);
+            Text description = UiFactory.CreateText(rect, "Description", BottomCenter, DescriptionSize, DescriptionFontSize, TextAnchor.MiddleCenter);
+            description.rectTransform.pivot = TopCenter;
+            description.rectTransform.anchoredPosition = DescriptionOffset;
             description.color = UiTheme.Muted;
             description.text = machine.description;
         }
