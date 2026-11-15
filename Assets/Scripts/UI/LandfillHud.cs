@@ -37,7 +37,7 @@ public class LandfillHud : MonoBehaviour
         Canvas canvas = UiFactory.CreateCanvas("HUD Canvas", CanvasSortingOrder);
         canvas.transform.SetParent(transform, false);
 
-        moneyText = UiFactory.CreateTitle(canvas.transform, "Money", TopLeft, new Vector2(300f, 70f), 56, UiTheme.Hope);
+        moneyText = UiFactory.CreateTitle(canvas.transform, "Money", TopLeft, new Vector2(300f, 70f), 56, UiTheme.Accent);
         moneyText.rectTransform.anchoredPosition = new Vector2(40f, -20f);
         moneyText.alignment = TextAnchor.MiddleLeft;
 
@@ -51,7 +51,7 @@ public class LandfillHud : MonoBehaviour
 
         messageText = UiFactory.CreateText(canvas.transform, "Message", BottomCenter, new Vector2(1300f, 50f), 30, TextAnchor.MiddleCenter);
         messageText.rectTransform.anchoredPosition = new Vector2(0f, 200f);
-        messageText.color = UiTheme.Hope;
+        messageText.color = UiTheme.Accent;
         messageText.text = "";
 
         CreateTargetCard(canvas.transform);

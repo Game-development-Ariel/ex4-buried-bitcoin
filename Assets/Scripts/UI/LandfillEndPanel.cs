@@ -22,7 +22,7 @@ public class LandfillEndPanel : MonoBehaviour
 
     private void ShowWin()
     {
-        ResultOverlay.Show("Found it!", "The target is back with its owner.\nThe city agrees: the sorting plant works.", UiTheme.Hope);
+        ResultOverlay.Show("Found it!", "The target is back with its owner.\nThe city agrees: the sorting plant works.", UiTheme.Accent);
     }
 
     private void ShowLose(string reason)

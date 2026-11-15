@@ -20,10 +20,11 @@ public class DayTimer : MonoBehaviour
 
     private void Update()
     {
-        Lose(Time.deltaTime);
+        Subtract(Time.deltaTime);
     }
 
-    public void Lose(float seconds)
+    /// <summary>Takes seconds off the time left: the passing time, and the penalty for a wrong pick.</summary>
+    public void Subtract(float seconds)
     {
         if (SecondsLeft <= 0f)
         {

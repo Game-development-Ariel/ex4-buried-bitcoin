@@ -65,7 +65,7 @@ public class LandfillRound : MonoBehaviour
 
     private void PunishWrongPick()
     {
-        timer.Lose(settings.wrongPickPenaltySeconds);
+        timer.Subtract(settings.wrongPickPenaltySeconds);
     }
 
     /// <summary>Marks the day as ended. Returns false if it had already ended, so only the first result counts.</summary>
