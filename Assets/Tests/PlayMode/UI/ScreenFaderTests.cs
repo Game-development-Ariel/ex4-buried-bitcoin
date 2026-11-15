@@ -41,6 +41,7 @@ public class ScreenFaderTests
     [UnityTest]
     public IEnumerator FadeAndLoad_CoversTheScreenWithBlackThatSurvivesTheLoad()
     {
+        PlayModeTestEnvironment.UseRealFrameTime();
         ScreenFader.FadeAndLoad("Landfill");
         GameObject fader = GameObject.Find("Screen Fader");
 
@@ -48,7 +49,7 @@ public class ScreenFaderTests
         Assert.IsTrue(IsFading);
         Assert.AreEqual("DontDestroyOnLoad", fader.scene.name);
         Assert.AreEqual(0f, fader.GetComponent<CanvasGroup>().alpha, 0.01f, "It starts see-through and fades in");
-        Assert.AreEqual(1000, fader.GetComponent<Canvas>().sortingOrder, "Above every other canvas");
+        Assert.AreEqual(UiTheme.FaderLayer, fader.GetComponent<Canvas>().sortingOrder, "Above every other canvas");
 
         yield return LandfillScene.WaitUntil(() => fader == null, 5f, "the fade to finish");
         Assert.IsFalse(IsFading);

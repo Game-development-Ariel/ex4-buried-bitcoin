@@ -57,11 +57,11 @@ public class MachineSlotTests
     {
         slot.Install(machine);
 
-        EditModeLog.ExpectDestroy();
         slot.Clear();
 
         Assert.IsTrue(slot.IsEmpty);
         Assert.IsTrue(emptySign.activeSelf);
+        Assert.AreEqual(0, slot.transform.childCount, "The machine object is removed from the slot");
     }
 
     [Test]

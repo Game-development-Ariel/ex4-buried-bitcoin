@@ -151,7 +151,6 @@ public class SortingDecisionsTests
     {
         Pick(can);
 
-        EditModeLog.ExpectDestroy();
         decisions.ThrowSelectedToWaste();
 
         Assert.AreEqual(0, table.ItemCount);
@@ -165,7 +164,6 @@ public class SortingDecisionsTests
     {
         Pick(toolbox);
 
-        EditModeLog.ExpectDestroy();
         decisions.ThrowSelectedToWaste();
 
         Assert.AreEqual(1, lost);
@@ -182,7 +180,6 @@ public class SortingDecisionsTests
         can.sellPrice = price;
         Pick(can);
 
-        EditModeLog.ExpectDestroy();
         decisions.SellSelected();
 
         Assert.AreEqual(100 + price, wallet.Money);
@@ -196,7 +193,6 @@ public class SortingDecisionsTests
     {
         Pick(toolbox);
 
-        EditModeLog.ExpectDestroy();
         decisions.SellSelected();
 
         Assert.AreEqual(1, lost);

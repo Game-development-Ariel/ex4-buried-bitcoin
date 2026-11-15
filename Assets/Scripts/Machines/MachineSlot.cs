@@ -35,7 +35,7 @@ public class MachineSlot : MonoBehaviour, IClickable
 
     public void Clear()
     {
-        Destroy(machineObject);
+        ObjectRemoval.Remove(machineObject);
         Machine = null;
         emptySign.SetActive(true);
     }

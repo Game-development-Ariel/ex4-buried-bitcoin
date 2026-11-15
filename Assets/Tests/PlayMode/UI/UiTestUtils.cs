@@ -1,12 +1,28 @@
+using System.Collections;
 using System.Linq;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-/// <summary>Finds the texts and buttons the UI components create in code, by the names they give them.</summary>
+/// <summary>
+/// Finds the texts and buttons the UI components create in code, by the names they give them,
+/// and waits the way the UI animations count time.
+/// </summary>
 public static class UiTestUtils
 {
+    /// <summary>
+    /// Waits this many seconds of unscaled time, the clock the UI animations use, so it runs even while the game is paused.
+    /// It adds up the frames' unscaled time exactly like UiAnim does, so with the fixed test frame it never depends on the real clock.
+    /// </summary>
+    public static IEnumerator WaitUnscaled(float seconds)
+    {
+        for (float waited = 0f; waited < seconds; waited += Time.unscaledDeltaTime)
+        {
+            yield return null;
+        }
+    }
+
     public static Text Text(Component root, string name)
     {
         Text[] found = root.GetComponentsInChildren<Text>(true).Where(text => text.name == name).ToArray();

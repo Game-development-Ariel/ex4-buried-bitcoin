@@ -305,6 +305,7 @@ public class CoreLoopTests
     [UnityTest]
     public IEnumerator PlayAgain_ReloadsTheSceneWithAFreshDay()
     {
+        PlayModeTestEnvironment.UseRealFrameTime();
         game.Wallet.Add(500);
         game.Timer.Subtract(game.Timer.SecondsLeft);
         yield return null;

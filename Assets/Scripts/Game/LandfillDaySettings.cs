@@ -7,7 +7,10 @@ using UnityEngine;
 public class LandfillDaySettings : ScriptableObject
 {
     [Header("Rules")]
+    [Tooltip("Dollars the player has when the day starts")]
     public int startMoney = 100;
+
+    [Tooltip("Seconds the player has to find the target")]
     public float timeLimitSeconds = 150f;
 
     [Tooltip("The clock turns red when this many seconds are left")]
@@ -32,6 +35,8 @@ public class LandfillDaySettings : ScriptableObject
 
     [Header("Trucks")]
     public TruckLoad[] trucks;
+
+    [Tooltip("Seconds of waiting before each truck starts dumping, the first one too")]
     public float secondsBeforeTruck = 6f;
 
     [Tooltip("Seconds between two items falling from the truck")]
@@ -39,6 +44,8 @@ public class LandfillDaySettings : ScriptableObject
 
     [Tooltip("The speed an item gets when it is dumped")]
     public Vector2 throwVelocity = new Vector2(1.5f, 0f);
+
+    [Tooltip("The biggest random spin push a dumped item gets (a torque impulse per unit of mass). Smaller items spin faster")]
     public float throwSpin = 0.3f;
 
     [Header("Target")]

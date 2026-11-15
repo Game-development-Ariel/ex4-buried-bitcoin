@@ -118,7 +118,7 @@ public class UiFactoryTests
         Time.timeScale = 0f;
 
         host.StartCoroutine(UiAnim.Fade(group, 1f, 0.2f));
-        yield return new WaitForSecondsRealtime(0.4f);
+        yield return UiTestUtils.WaitUnscaled(0.4f);
 
         Assert.AreEqual(1f, group.alpha);
         Object.DestroyImmediate(group.gameObject);

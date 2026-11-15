@@ -9,8 +9,6 @@ using UnityEngine.UI;
 /// </summary>
 public class ScreenFader : MonoBehaviour
 {
-    // Above every other canvas, so the black covers everything.
-    private const int SortingOrder = 1000;
     private const float FadeOutSeconds = 0.45f;
     private const float FadeInSeconds = 0.6f;
 
@@ -32,7 +30,7 @@ public class ScreenFader : MonoBehaviour
         }
         isFading = true;
 
-        Canvas canvas = UiFactory.CreateCanvas("Screen Fader", SortingOrder);
+        Canvas canvas = UiFactory.CreateCanvas("Screen Fader", UiTheme.FaderLayer);
         DontDestroyOnLoad(canvas.gameObject);
         var black = UiFactory.CreateImage(canvas.transform, "Black", null, Color.black);
         UiFactory.Stretch(black.rectTransform);
@@ -49,6 +47,6 @@ public class ScreenFader : MonoBehaviour
         yield return SceneManager.LoadSceneAsync(scene);
         isFading = false;
         yield return UiAnim.Fade(group, 0f, FadeInSeconds);
-        Destroy(group.gameObject);
+        ObjectRemoval.Remove(group.gameObject);
     }
 }

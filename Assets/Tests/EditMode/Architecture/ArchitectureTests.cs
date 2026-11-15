@@ -271,18 +271,6 @@ public class ArchitectureTests
 
     // ---------- (e) Every tuning number explains itself ----------
 
-    // Numbers whose name already says everything. A new number without a tooltip fails the test.
-    private static readonly HashSet<string> NumbersWithoutTooltip = new HashSet<string>
-    {
-        "LandfillDaySettings.startMoney",
-        "LandfillDaySettings.timeLimitSeconds",
-        "LandfillDaySettings.secondsBeforeTruck",
-        "LandfillDaySettings.throwSpin",
-        "TrashItemData.mass",
-        "MachineData.price",
-        "Entry.count",
-    };
-
     private static IEnumerable<string> SerializedNumbersWithoutTooltip()
     {
         foreach (Type type in OurTypes(Game))
@@ -306,17 +294,9 @@ public class ArchitectureTests
     }
 
     [Test]
-    public void EverySerializedNumber_HasATooltip_OrIsOnTheShortList()
+    public void EverySerializedNumber_HasATooltip()
     {
-        string[] unexplained = SerializedNumbersWithoutTooltip().Where(name => !NumbersWithoutTooltip.Contains(name)).ToArray();
-
-        CollectionAssert.IsEmpty(unexplained, "Add a [Tooltip] so the number explains itself in the Inspector");
-    }
-
-    [Test]
-    public void TheShortListOfNumbersWithoutTooltip_HasNoOldEntries()
-    {
-        CollectionAssert.IsSubsetOf(NumbersWithoutTooltip, SerializedNumbersWithoutTooltip().ToArray(), "Remove names that now have a tooltip or are gone");
+        CollectionAssert.IsEmpty(SerializedNumbersWithoutTooltip().ToArray(), "Add a [Tooltip] so the number explains itself in the Inspector");
     }
 
     // ---------- (f) The README knows every class ----------
@@ -341,5 +321,22 @@ public class ArchitectureTests
         {
             StringAssert.Contains(folder + "/", readme);
         }
+    }
+
+    // ---------- (g) Objects are removed through ObjectRemoval ----------
+
+    // Object.Destroy only logs an error outside Play mode. ObjectRemoval picks the right call,
+    // so the scene builder and the EditMode tests can run the same code as the game.
+    private static readonly Regex DirectDestroy = new Regex(@"(?<![\w.])(Object\.)?Destroy(Immediate)?\s*\(");
+
+    [Test]
+    public void GameCode_RemovesObjectsOnlyThroughObjectRemoval()
+    {
+        string[] direct = SourceFiles.Runtime()
+            .Where(path => path != "Core/ObjectRemoval.cs")
+            .Where(path => DirectDestroy.IsMatch(SourceFiles.Code(path)))
+            .ToArray();
+
+        CollectionAssert.IsEmpty(direct, "Call ObjectRemoval.Remove instead of Destroy");
     }
 }

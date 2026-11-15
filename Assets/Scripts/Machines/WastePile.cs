@@ -23,6 +23,6 @@ public class WastePile : MonoBehaviour
         {
             targetLost.Raise();
         }
-        Destroy(item.gameObject);
+        ObjectRemoval.Remove(item.gameObject);
     }
 }

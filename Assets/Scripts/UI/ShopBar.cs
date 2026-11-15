@@ -7,7 +7,6 @@ using UnityEngine.UI;
 /// </summary>
 public class ShopBar : MonoBehaviour
 {
-    private const int CanvasSortingOrder = 10;
     private const int HelpFontSize = 24;
     private const int ButtonFontSize = 34;
     private const int DescriptionFontSize = 20;
@@ -34,7 +33,7 @@ public class ShopBar : MonoBehaviour
     private void Awake()
     {
         UiFactory.EnsureEventSystem();
-        Canvas canvas = UiFactory.CreateCanvas("Shop Canvas", CanvasSortingOrder);
+        Canvas canvas = UiFactory.CreateCanvas("Shop Canvas", UiTheme.HudLayer);
         canvas.transform.SetParent(transform, false);
 
         Text help = UiFactory.CreateText(canvas.transform, "Help", BottomLeft, HelpSize, HelpFontSize, TextAnchor.MiddleLeft);

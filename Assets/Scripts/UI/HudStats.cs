@@ -6,9 +6,9 @@ using UnityEngine.UI;
 /// </summary>
 public class HudStats : MonoBehaviour
 {
-    private const int CanvasSortingOrder = 10;
     private const int BigFontSize = 56;
     private const int TruckFontSize = 26;
+    private const int SecondsPerMinute = 60;
 
     private static readonly Vector2 TopLeft = new Vector2(0f, 1f);
     private static readonly Vector2 TopCenter = new Vector2(0.5f, 1f);
@@ -29,7 +29,7 @@ public class HudStats : MonoBehaviour
 
     private void Awake()
     {
-        Canvas canvas = UiFactory.CreateCanvas("Stats Canvas", CanvasSortingOrder);
+        Canvas canvas = UiFactory.CreateCanvas("Stats Canvas", UiTheme.HudLayer);
         canvas.transform.SetParent(transform, false);
 
         moneyText = UiFactory.CreateTitle(canvas.transform, "Money", TopLeft, BigTextSize, BigFontSize, UiTheme.Accent);
@@ -68,7 +68,7 @@ public class HudStats : MonoBehaviour
     private void Update()
     {
         int seconds = Mathf.CeilToInt(timer.SecondsLeft);
-        timeText.text = $"{seconds / 60}:{seconds % 60:00}";
+        timeText.text = $"{seconds / SecondsPerMinute}:{seconds % SecondsPerMinute:00}";
         timeText.color = seconds <= settings.warningSeconds ? UiTheme.Danger : UiTheme.TextColor;
     }
 

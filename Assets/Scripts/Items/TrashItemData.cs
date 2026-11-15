@@ -12,6 +12,8 @@ public class TrashItemData : ScriptableObject
 
     [Tooltip("Width and height in world units")]
     public float size = 0.5f;
+
+    [Tooltip("The Rigidbody2D mass. The blower lifts light items off the belt, heavy ones stay on it")]
     public float mass = 1f;
 
     [Tooltip("Small items fall through the sieve")]

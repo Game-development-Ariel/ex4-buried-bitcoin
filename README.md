@@ -65,6 +65,7 @@ Assets/
 │   │               LandfillEndPanel, ResultOverlay, ScreenFader, ButtonFeel,
 │   │               UiFactory, UiTheme, UiAnim
 │   ├── Audio/      Sfx
+│   ├── Core/       ObjectRemoval (removes an object correctly in Play mode and in edit mode)
 │   └── Editor/     BuriedBitcoin.Editor.asmdef (editor only, adds URP 2D for the light)
 │                   ProjectBuilder (the Tools menu), LandfillSceneBuilder, LandfillAssets,
 │                   SceneParts, SetupTools, PlaceholderSprites
@@ -237,13 +238,13 @@ flowchart LR
 |---|---|---|
 | [Sfx](Assets/Scripts/Audio/Sfx.cs) | מחלקה סטטית עם AudioSource אחד ומילון של הצלילים שכבר נטענו | הקליק של Play again צריך להמשיך גם כשהסצנה נטענת מחדש. המילון חוסך טעינה מ-Resources בכל לחיצה. אין בהם מצב של המשחק, ובין הפעלות של Play הם בטוחים: AudioSource שנהרס נוצר מחדש, וצליל שנפרק נטען מחדש |
 | [ScreenFader](Assets/Scripts/UI/ScreenFader.cs) | `FadeAndLoad` סטטית ודגל `isFading` | המסך השחור חייב לשרוד את טעינת הסצנה כדי להתבהר אחריה. הדגל מונע טעינה כפולה. ב-Project Settings כבוי ה-Domain Reload, אז משתנה סטטי לא מתאפס לבד בין הפעלות של Play. לכן `ResetStatics` עם `[RuntimeInitializeOnLoadMethod(SubsystemRegistration)]` מאפס את הדגל בתחילת כל הפעלה |
-| UiFactory, UiAnim, UiTheme, ResultOverlay | מחלקות סטטיות של פונקציות עזר וקבועים | אין בהן מצב |
+| UiFactory, UiAnim, UiTheme, ResultOverlay, ObjectRemoval | מחלקות סטטיות של פונקציות עזר וקבועים | אין בהן מצב |
 
 ## בדיקות
 
 יש בדיקות אוטומטיות לכל הקוד, בתיקייה `Assets/Tests`. **מריצים את כל הבדיקות לפני כל מיזוג (merge) ל-main**, ומתקנים את מה שנכשל לפני שממשיכים. אם בדיקה נכשלת בגלל תקלה במשחק, מתקנים את המשחק ולא את הבדיקה.
 
-בזמן בדיקות המשחק הצליל מושתק ([MuteAudioDuringTests](Assets/Tests/PlayMode/MuteAudioDuringTests.cs)), כדי שהמוזיקה והצלילים של הסצנה לא ייצאו לרמקולים. הבדיקות עדיין בודקות שהצלילים מתנגנים.
+בזמן בדיקות המשחק ([PlayModeTestEnvironment](Assets/Tests/PlayMode/PlayModeTestEnvironment.cs)) הצליל מושתק, כדי שהמוזיקה והצלילים של הסצנה לא ייצאו לרמקולים. הבדיקות עדיין בודקות שהצלילים מתנגנים. בנוסף, כל פריים מקדם את שעון המשחק בדיוק בשישים של שנייה, כך שבדיקות של זמן נותנות אותה תוצאה גם במחשב איטי.
 
 יש שני סוגים:
 

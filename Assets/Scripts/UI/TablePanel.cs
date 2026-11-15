@@ -7,7 +7,6 @@ using UnityEngine.UI;
 /// </summary>
 public class TablePanel : MonoBehaviour
 {
-    private const int CanvasSortingOrder = 10;
     private const int StatusFontSize = 24;
     private const int ButtonFontSize = 32;
     private const float ButtonHeight = 70f;
@@ -38,7 +37,7 @@ public class TablePanel : MonoBehaviour
     private void Awake()
     {
         UiFactory.EnsureEventSystem();
-        Canvas canvas = UiFactory.CreateCanvas("Table Canvas", CanvasSortingOrder);
+        Canvas canvas = UiFactory.CreateCanvas("Table Canvas", UiTheme.HudLayer);
         canvas.transform.SetParent(transform, false);
 
         status = UiFactory.CreateText(canvas.transform, "Status", BottomRight, StatusSize, StatusFontSize, TextAnchor.MiddleRight);

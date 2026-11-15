@@ -7,7 +7,6 @@ using UnityEngine.UI;
 /// </summary>
 public class HudMessageLine : MonoBehaviour
 {
-    private const int CanvasSortingOrder = 10;
     private const int FontSize = 30;
     private const float MessageSeconds = 3.5f;
 
@@ -27,7 +26,7 @@ public class HudMessageLine : MonoBehaviour
 
     private void Awake()
     {
-        Canvas canvas = UiFactory.CreateCanvas("Message Canvas", CanvasSortingOrder);
+        Canvas canvas = UiFactory.CreateCanvas("Message Canvas", UiTheme.HudLayer);
         canvas.transform.SetParent(transform, false);
 
         messageText = UiFactory.CreateText(canvas.transform, "Message", BottomCenter, Size, FontSize, TextAnchor.MiddleCenter);

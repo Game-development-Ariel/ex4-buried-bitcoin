@@ -143,10 +143,14 @@ public class LandfillScene
         }
     }
 
-    /// <summary>Removes what the scene left behind that survives a scene load (the fader and the sound player).</summary>
+    /// <summary>
+    /// Removes what the scene left behind that survives a scene load (the fader and the sound player),
+    /// and sets the clock back to normal speed with the fixed test frame.
+    /// </summary>
     public static void CleanUpLeftovers()
     {
         Time.timeScale = 1f;
+        Time.captureDeltaTime = PlayModeTestEnvironment.FrameSeconds;
         foreach (string name in new[] { "Screen Fader", "Sound Effects" })
         {
             GameObject leftover = GameObject.Find(name);

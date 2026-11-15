@@ -257,12 +257,12 @@ public class TableContentsTests
     {
         TrashItem item = Enter();
 
-        EditModeLog.ExpectDestroy();
         table.Discard(item);
 
         Assert.AreEqual(0, table.ItemCount);
         CollectionAssert.AreEqual(new[] { item }, removed);
         Assert.AreEqual(0, TestUtils.ListenerCount(item, "Clicked"));
+        Assert.IsTrue(item == null, "The item's object is destroyed");
     }
 
     [Test]
@@ -270,9 +270,7 @@ public class TableContentsTests
     {
         List<TrashItem> items = Fill(4);
 
-        EditModeLog.ExpectDestroy();
         table.Discard(items[0]);
-        EditModeLog.ExpectDestroy();
         table.Discard(items[1]);
 
         Assert.AreEqual(1, roomCount);

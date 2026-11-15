@@ -77,7 +77,7 @@ public class TableContents : MonoBehaviour
     public void Discard(TrashItem item)
     {
         Remove(item);
-        Destroy(item.gameObject);
+        ObjectRemoval.Remove(item.gameObject);
     }
 
     private void Remove(TrashItem item)

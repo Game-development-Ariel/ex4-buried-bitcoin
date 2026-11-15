@@ -25,7 +25,7 @@ public class ButtonFeelTests
 
     private IEnumerator Settle()
     {
-        yield return new WaitForSecondsRealtime(0.6f);
+        yield return UiTestUtils.WaitUnscaled(0.6f);
     }
 
     [UnityTest]

@@ -6,7 +6,6 @@ using UnityEngine.UI;
 /// </summary>
 public class TargetCard : MonoBehaviour
 {
-    private const int CanvasSortingOrder = 10;
     private const int LabelFontSize = 22;
     private const int DescriptionFontSize = 26;
 
@@ -23,7 +22,7 @@ public class TargetCard : MonoBehaviour
 
     private void Awake()
     {
-        Canvas canvas = UiFactory.CreateCanvas("Target Canvas", CanvasSortingOrder);
+        Canvas canvas = UiFactory.CreateCanvas("Target Canvas", UiTheme.HudLayer);
         canvas.transform.SetParent(transform, false);
 
         Image card = UiFactory.CreatePanel(canvas.transform, "Target Card", "Panel");

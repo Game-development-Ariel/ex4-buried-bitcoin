@@ -12,6 +12,41 @@ public static class LandfillAssets
 {
     private const string Folder = "Assets/Data/";
 
+    // The items of day 1. Each has a color, a size (width and height in world units), a mass (Rigidbody2D mass)
+    // and a sell price (dollars, 0 = it can't be sold). The blower lifts the light ones.
+    private const float LightMass = 0.2f;
+    private const float NormalMass = 1f;
+    private const float HeavyMass = 2f;
+    private const float VeryHeavyMass = 3f;
+    private const int NoSellPrice = 0;
+
+    private static readonly Color DirtColor = new Color(0.42f, 0.3f, 0.2f);
+    private const float DirtSize = 0.35f;
+    private static readonly Color BagColor = new Color(0.88f, 0.9f, 0.92f);
+    private const float BagSize = 0.6f;
+    private static readonly Color BottleColor = new Color(0.3f, 0.6f, 0.4f);
+    private const float BottleSize = 0.5f;
+    private static readonly Color CanColor = new Color(0.72f, 0.74f, 0.78f);
+    private const float CanSize = 0.45f;
+    private const int CanPrice = 10;
+    private static readonly Color ScrapColor = new Color(0.82f, 0.48f, 0.25f);
+    private const float ScrapSize = 0.6f;
+    private const int ScrapPrice = 30;
+    private static readonly Color RustyBoxColor = new Color(0.55f, 0.27f, 0.16f);
+    private const float RustyBoxSize = 0.85f;
+    private const int RustyBoxPrice = 5;
+    private static readonly Color ToolboxColor = new Color(0.85f, 0.12f, 0.1f);
+    private const float ToolboxSize = 0.95f;
+
+    // How many of each item the two trucks bring (when it is more than one).
+    private const int FirstTruckDirt = 9;
+    private const int FirstTruckBags = 3;
+    private const int FirstTruckCans = 2;
+    private const int SecondTruckDirt = 13;
+    private const int SecondTruckBags = 4;
+    private const int SecondTruckBottles = 2;
+    private const int SecondTruckCans = 2;
+
     public static GameEvent TableFull => SetupTools.Asset<GameEvent>(Folder + "Events/TableFull.asset");
     public static GameEvent TableHasRoom => SetupTools.Asset<GameEvent>(Folder + "Events/TableHasRoom.asset");
     public static GameEvent TargetFound => SetupTools.Asset<GameEvent>(Folder + "Events/TargetFound.asset");
@@ -80,18 +115,18 @@ public static class LandfillAssets
             return day;
         }
 
-        TrashItemData dirt = Item("Dirt clod", new Color(0.42f, 0.3f, 0.2f), 0.35f, 1f, true, 0);
-        TrashItemData bag = Item("Plastic bag", new Color(0.88f, 0.9f, 0.92f), 0.6f, 0.2f, false, 0);
-        TrashItemData bottle = Item("Glass bottle", new Color(0.3f, 0.6f, 0.4f), 0.5f, 1f, false, 0);
-        TrashItemData can = Item("Tin can", new Color(0.72f, 0.74f, 0.78f), 0.45f, 1f, false, 10);
-        TrashItemData scrap = Item("Copper scrap", new Color(0.82f, 0.48f, 0.25f), 0.6f, 2f, false, 30);
-        TrashItemData rustyBox = Item("Rusty box", new Color(0.55f, 0.27f, 0.16f), 0.85f, 2f, false, 5);
-        TrashItemData toolbox = Item("Red toolbox", new Color(0.85f, 0.12f, 0.1f), 0.95f, 3f, false, 0, "A red toolbox. Big, heavy, metal.");
+        TrashItemData dirt = Item("Dirt clod", DirtColor, DirtSize, NormalMass, true, NoSellPrice);
+        TrashItemData bag = Item("Plastic bag", BagColor, BagSize, LightMass, false, NoSellPrice);
+        TrashItemData bottle = Item("Glass bottle", BottleColor, BottleSize, NormalMass, false, NoSellPrice);
+        TrashItemData can = Item("Tin can", CanColor, CanSize, NormalMass, false, CanPrice);
+        TrashItemData scrap = Item("Copper scrap", ScrapColor, ScrapSize, HeavyMass, false, ScrapPrice);
+        TrashItemData rustyBox = Item("Rusty box", RustyBoxColor, RustyBoxSize, HeavyMass, false, RustyBoxPrice);
+        TrashItemData toolbox = Item("Red toolbox", ToolboxColor, ToolboxSize, VeryHeavyMass, false, NoSellPrice, "A red toolbox. Big, heavy, metal.");
 
         day.trucks = new[]
         {
-            Load((dirt, 9), (bag, 3), (bottle, 1), (can, 2), (scrap, 1)),
-            Load((dirt, 13), (bag, 4), (bottle, 2), (can, 2), (scrap, 1), (rustyBox, 1), (toolbox, 1)),
+            Load((dirt, FirstTruckDirt), (bag, FirstTruckBags), (bottle, 1), (can, FirstTruckCans), (scrap, 1)),
+            Load((dirt, SecondTruckDirt), (bag, SecondTruckBags), (bottle, SecondTruckBottles), (can, SecondTruckCans), (scrap, 1), (rustyBox, 1), (toolbox, 1)),
         };
         day.target = toolbox;
         EditorUtility.SetDirty(day);

@@ -129,7 +129,6 @@ public class MachineShopTests
         slots[0].OnClicked();
         int afterBuying = wallet.Money;
 
-        EditModeLog.ExpectDestroy();
         slots[0].OnClicked();
 
         Assert.IsTrue(slots[0].IsEmpty);
@@ -145,7 +144,6 @@ public class MachineShopTests
         MachineData blower = utils.Machine("Blower", 20, utils.NewObject("Blower Prefab"));
         shop.Select(blower);
 
-        EditModeLog.ExpectDestroy();
         slots[0].OnClicked();
 
         Assert.IsTrue(slots[0].IsEmpty);
