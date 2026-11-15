@@ -39,6 +39,11 @@ public static class SetupTools
     {
         SerializedObject fields = new SerializedObject(target);
         SerializedProperty property = fields.FindProperty(field);
+        if (property == null)
+        {
+            Debug.LogError($"{target.GetType().Name} has no field called {field}.");
+            return;
+        }
         property.arraySize = values.Length;
         for (int i = 0; i < values.Length; i++)
         {
