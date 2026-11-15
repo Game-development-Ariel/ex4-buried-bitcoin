@@ -38,16 +38,28 @@ public class HudMessageLine : MonoBehaviour
 
     private void OnEnable()
     {
-        shop.Refused += ShowMessage;
+        shop.Refused += ShowRefusal;
         wrongPick.Subscribe(ShowWrongPick);
         tableFull.Subscribe(ShowTableFull);
     }
 
     private void OnDisable()
     {
-        shop.Refused -= ShowMessage;
+        shop.Refused -= ShowRefusal;
         wrongPick.Unsubscribe(ShowWrongPick);
         tableFull.Unsubscribe(ShowTableFull);
+    }
+
+    private void ShowRefusal(MachineShop.Refusal refusal)
+    {
+        if (refusal == MachineShop.Refusal.NotEnoughMoney)
+        {
+            ShowMessage($"Not enough money for the {shop.Selected.displayName}. Sell something first.");
+        }
+        else
+        {
+            ShowMessage("Pick a machine in the shop first.");
+        }
     }
 
     private void ShowWrongPick()

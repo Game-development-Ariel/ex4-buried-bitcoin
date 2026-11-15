@@ -18,7 +18,7 @@ public static class LandfillAssets
     public static GameEvent TargetLost => SetupTools.Asset<GameEvent>(Folder + "Events/TargetLost.asset");
     public static GameEvent WrongPick => SetupTools.Asset<GameEvent>(Folder + "Events/WrongPick.asset");
     public static GameEvent DayWon => SetupTools.Asset<GameEvent>(Folder + "Events/DayWon.asset");
-    public static TextEvent DayLost => SetupTools.Asset<TextEvent>(Folder + "Events/DayLost.asset");
+    public static DayLostEvent DayLost => SetupTools.Asset<DayLostEvent>(Folder + "Events/DayLost.asset");
 
     public static TrashItemData Item(string name, Color color, float size, float mass, bool isSmall, int sellPrice, string description = "")
     {

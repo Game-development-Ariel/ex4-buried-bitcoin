@@ -19,7 +19,7 @@ public class LandfillRound : MonoBehaviour
 
     [Header("Raises")]
     [SerializeField] private GameEvent dayWon;
-    [SerializeField] private TextEvent dayLost;
+    [SerializeField] private DayLostEvent dayLost;
 
     private bool ended;
 
@@ -51,7 +51,7 @@ public class LandfillRound : MonoBehaviour
     {
         if (End())
         {
-            dayLost.Raise("The target went to the waste pile. It is buried again.");
+            dayLost.Raise(LossReason.TargetBuried);
         }
     }
 
@@ -59,7 +59,7 @@ public class LandfillRound : MonoBehaviour
     {
         if (End())
         {
-            dayLost.Raise("The work day is over, and the target is still somewhere in the trash.");
+            dayLost.Raise(LossReason.TimeUp);
         }
     }
 
