@@ -8,7 +8,7 @@
 
 ## קישורים
 
-* המשחק באיץ': יתווסף אחרי ההעלאה
+* המשחק באיץ' (אפשר לשחק בדפדפן): [game-dev-ariel.itch.io/ex4-buried-bitcoin](https://game-dev-ariel.itch.io/ex4-buried-bitcoin)
 * דיווח על שימוש בבינה מלאכותית: [AI_REPORT.md](AI_REPORT.md)
 
 ## איך מריצים
