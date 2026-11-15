@@ -14,8 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LandfillDaySettings
   startMoney: 100
   timeLimitSeconds: 150
+  warningSeconds: 20
   wrongPickPenaltySeconds: 20
   tableCapacity: 14
+  beltSpeed: 2.5
+  blowerForce: 6
   trucks:
   - entries:
     - item: {fileID: 11400000, guid: 04cd5c874e537ac4fb1de78dad0e74bc, type: 2}

@@ -7,8 +7,7 @@ using UnityEngine;
 [RequireComponent(typeof(SurfaceEffector2D))]
 public class ConveyorBelt : MonoBehaviour
 {
-    [Tooltip("World units per second")]
-    [SerializeField] private float speed = 2.5f;
+    [SerializeField] private LandfillDaySettings settings;
 
     [Header("Listens to")]
     [SerializeField] private GameEvent tableFull;
@@ -36,7 +35,7 @@ public class ConveyorBelt : MonoBehaviour
 
     private void Run()
     {
-        effector.speed = speed;
+        effector.speed = settings.beltSpeed;
     }
 
     private void Stop()

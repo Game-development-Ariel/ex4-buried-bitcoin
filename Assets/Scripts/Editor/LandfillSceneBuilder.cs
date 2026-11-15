@@ -37,7 +37,7 @@ public static class LandfillSceneBuilder
         SceneParts.CreateGlobalLight();
         LandfillDaySettings day = LandfillAssets.DaySettings();
 
-        Collider2D belt = CreateBelt();
+        Collider2D belt = CreateBelt(day);
         CreateWasteAndWalls(day);
         MachineSlot[] slots = CreateSlots(belt);
         TruckDumper dumper = CreateDumper(day);
@@ -72,7 +72,7 @@ public static class LandfillSceneBuilder
 
     // ---------- The line ----------
 
-    private static Collider2D CreateBelt()
+    private static Collider2D CreateBelt(LandfillDaySettings day)
     {
         float width = BeltRight - BeltLeft;
         Vector2 center = new Vector2((BeltLeft + BeltRight) / 2f, BeltTop - BeltThickness / 2f);
@@ -82,6 +82,7 @@ public static class LandfillSceneBuilder
         box.usedByEffector = true;
         belt.AddComponent<SurfaceEffector2D>();
         ConveyorBelt conveyor = belt.AddComponent<ConveyorBelt>();
+        SetupTools.SetField(conveyor, "settings", day);
         SetupTools.SetField(conveyor, "tableFull", LandfillAssets.TableFull);
         SetupTools.SetField(conveyor, "tableHasRoom", LandfillAssets.TableHasRoom);
         return box;
@@ -225,7 +226,7 @@ public static class LandfillSceneBuilder
     /// The blower has no script at all: an AreaEffector2D pushes up everything inside its column.
     /// The force is the same for every item, so only the light ones are lifted.
     /// </summary>
-    private static GameObject CreateBlowerPrefab()
+    private static GameObject CreateBlowerPrefab(LandfillDaySettings day)
     {
         var blower = new GameObject("Blower");
         BoxCollider2D column = blower.AddComponent<BoxCollider2D>();
@@ -237,7 +238,7 @@ public static class LandfillSceneBuilder
         AreaEffector2D wind = blower.AddComponent<AreaEffector2D>();
         wind.useGlobalAngle = true;
         wind.forceAngle = 90f; // Straight up.
-        wind.forceMagnitude = 6f;
+        wind.forceMagnitude = day.blowerForce;
 
         SceneParts.CreateBox("Wind", blower.transform, new Vector2(0f, 1.5f), new Vector2(1.6f, 3f), new Color(0.6f, 0.8f, 1f, 0.1f), 1);
         SceneParts.CreateBox("Fan", blower.transform, new Vector2(0f, -0.65f), new Vector2(1.4f, 0.6f), new Color(0.35f, 0.5f, 0.65f), 3);
@@ -269,11 +270,9 @@ public static class LandfillSceneBuilder
 
         ShopBar shopBar = ui.AddComponent<ShopBar>();
         SetupTools.SetField(shopBar, "shop", shop);
-        SetupTools.SetArray(shopBar, "machines", new Object[]
-        {
-            LandfillAssets.Machine("Sieve", 100, "small items fall to the waste", CreateSievePrefab()),
-            LandfillAssets.Machine("Blower", 50, "light items fly to the waste", CreateBlowerPrefab()),
-        });
+        LandfillAssets.Machine("Sieve", 100, "small items fall to the waste", CreateSievePrefab());
+        LandfillAssets.Machine("Blower", 50, "light items fly to the waste", CreateBlowerPrefab(day));
+        SetupTools.SetArray(shopBar, "machines", LandfillAssets.AllMachines());
 
         SetupTools.SetField(ui.AddComponent<TablePanel>(), "table", table);
 

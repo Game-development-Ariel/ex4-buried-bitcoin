@@ -84,7 +84,7 @@ public class LandfillHud : MonoBehaviour
     {
         int seconds = Mathf.CeilToInt(timer.SecondsLeft);
         timeText.text = $"{seconds / 60}:{seconds % 60:00}";
-        timeText.color = seconds <= 20 ? UiTheme.Danger : UiTheme.TextColor;
+        timeText.color = seconds <= settings.warningSeconds ? UiTheme.Danger : UiTheme.TextColor;
     }
 
     private void CreateTargetCard(Transform canvas)

@@ -1,4 +1,5 @@
 using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -52,6 +53,19 @@ public static class LandfillAssets
         machine.prefab = prefab;
         EditorUtility.SetDirty(machine);
         return machine;
+    }
+
+    /// <summary>
+    /// Every MachineData asset in the project, cheapest first. The shop shows all of them,
+    /// so a new machine is only a new asset and its prefab.
+    /// </summary>
+    public static MachineData[] AllMachines()
+    {
+        return AssetDatabase.FindAssets("t:MachineData")
+            .Select(guid => AssetDatabase.LoadAssetAtPath<MachineData>(AssetDatabase.GUIDToAssetPath(guid)))
+            .OrderBy(machine => machine.price)
+            .ThenBy(machine => machine.displayName)
+            .ToArray();
     }
 
     /// <summary>Day 1 from the level design, made shorter: two trucks, and the red toolbox is in the second.</summary>
