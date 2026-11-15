@@ -11,7 +11,8 @@ public class TablePanel : MonoBehaviour
 
     private static readonly Vector2 BottomRight = new Vector2(1f, 0f);
 
-    [SerializeField] private SortingTable table;
+    [SerializeField] private TableContents table;
+    [SerializeField] private SortingDecisions decisions;
 
     private Text status;
     private Text sellLabel;
@@ -33,21 +34,23 @@ public class TablePanel : MonoBehaviour
         UiFactory.Stretch((RectTransform)group.transform);
         buttons = group.GetComponent<CanvasGroup>();
 
-        AddButton("Waste", -905f, 190f).onClick.AddListener(table.ThrowSelectedToWaste);
+        AddButton("Waste", -905f, 190f).onClick.AddListener(decisions.ThrowSelectedToWaste);
         Button sell = AddButton("Sell", -705f, 190f);
-        sell.onClick.AddListener(table.SellSelected);
+        sell.onClick.AddListener(decisions.SellSelected);
         sellLabel = sell.GetComponentInChildren<Text>();
-        AddButton("This is the target!", -410f, 380f).onClick.AddListener(table.MarkSelectedAsTarget);
+        AddButton("This is the target!", -410f, 380f).onClick.AddListener(decisions.MarkSelectedAsTarget);
     }
 
     private void OnEnable()
     {
         table.Changed += Refresh;
+        decisions.SelectionChanged += Refresh;
     }
 
     private void OnDisable()
     {
         table.Changed -= Refresh;
+        decisions.SelectionChanged -= Refresh;
     }
 
     private void Start()
@@ -64,7 +67,7 @@ public class TablePanel : MonoBehaviour
 
     private void Refresh()
     {
-        TrashItem selected = table.Selected;
+        TrashItem selected = decisions.Selected;
         buttons.interactable = selected != null;
         buttons.alpha = selected != null ? 1f : 0.35f;
 

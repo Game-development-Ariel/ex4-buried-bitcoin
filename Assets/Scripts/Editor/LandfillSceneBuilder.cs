@@ -52,7 +52,7 @@ public static class LandfillSceneBuilder
         SetupTools.SetField(shop, "wallet", wallet);
         SetupTools.SetArray(shop, "slots", slots);
 
-        SortingTable table = CreateTable(day, wallet);
+        GameObject table = CreateTable(day, wallet);
         WorldClicker clicker = camera.gameObject.AddComponent<WorldClicker>();
         SetupTools.SetField(clicker, "worldCamera", camera);
 
@@ -165,7 +165,8 @@ public static class LandfillSceneBuilder
         return dumper;
     }
 
-    private static SortingTable CreateTable(LandfillDaySettings day, Wallet wallet)
+    /// <summary>The table, with the two parts of its logic: what lies on it, and the player's decisions.</summary>
+    private static GameObject CreateTable(LandfillDaySettings day, Wallet wallet)
     {
         var parent = new GameObject("Sorting Table").transform;
         SceneParts.CreateBox("Table Top", parent, new Vector2(6.02f, -1.6f), new Vector2(4.55f, 0.3f), new Color(0.45f, 0.36f, 0.26f), 2)
@@ -178,15 +179,19 @@ public static class LandfillSceneBuilder
         area.offset = new Vector2(6.05f, 0.6f);
         area.size = new Vector2(4.4f, 4.1f);
 
-        SortingTable table = parent.gameObject.AddComponent<SortingTable>();
-        SetupTools.SetField(table, "settings", day);
-        SetupTools.SetField(table, "wallet", wallet);
-        SetupTools.SetField(table, "tableFull", LandfillAssets.TableFull);
-        SetupTools.SetField(table, "tableHasRoom", LandfillAssets.TableHasRoom);
-        SetupTools.SetField(table, "targetFound", LandfillAssets.TargetFound);
-        SetupTools.SetField(table, "targetLost", LandfillAssets.TargetLost);
-        SetupTools.SetField(table, "wrongPick", LandfillAssets.WrongPick);
-        return table;
+        TableContents contents = parent.gameObject.AddComponent<TableContents>();
+        SetupTools.SetField(contents, "settings", day);
+        SetupTools.SetField(contents, "tableFull", LandfillAssets.TableFull);
+        SetupTools.SetField(contents, "tableHasRoom", LandfillAssets.TableHasRoom);
+
+        SortingDecisions decisions = parent.gameObject.AddComponent<SortingDecisions>();
+        SetupTools.SetField(decisions, "settings", day);
+        SetupTools.SetField(decisions, "table", contents);
+        SetupTools.SetField(decisions, "wallet", wallet);
+        SetupTools.SetField(decisions, "targetFound", LandfillAssets.TargetFound);
+        SetupTools.SetField(decisions, "targetLost", LandfillAssets.TargetLost);
+        SetupTools.SetField(decisions, "wrongPick", LandfillAssets.WrongPick);
+        return parent.gameObject;
     }
 
     // ---------- Prefabs ----------
@@ -255,7 +260,7 @@ public static class LandfillSceneBuilder
 
     // ---------- UI ----------
 
-    private static void CreateUi(LandfillDaySettings day, Wallet wallet, DayTimer timer, TruckDumper dumper, MachineShop shop, SortingTable table)
+    private static void CreateUi(LandfillDaySettings day, Wallet wallet, DayTimer timer, TruckDumper dumper, MachineShop shop, GameObject table)
     {
         var ui = new GameObject("UI");
 
@@ -274,7 +279,9 @@ public static class LandfillSceneBuilder
         LandfillAssets.Machine("Blower", 50, "light items fly to the waste", CreateBlowerPrefab(day));
         SetupTools.SetArray(shopBar, "machines", LandfillAssets.AllMachines());
 
-        SetupTools.SetField(ui.AddComponent<TablePanel>(), "table", table);
+        TablePanel tablePanel = ui.AddComponent<TablePanel>();
+        SetupTools.SetField(tablePanel, "table", table.GetComponent<TableContents>());
+        SetupTools.SetField(tablePanel, "decisions", table.GetComponent<SortingDecisions>());
 
         LandfillEndPanel end = ui.AddComponent<LandfillEndPanel>();
         SetupTools.SetField(end, "dayWon", LandfillAssets.DayWon);

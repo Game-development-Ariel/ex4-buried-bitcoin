@@ -17,6 +17,7 @@ MonoBehaviour:
   warningSeconds: 20
   wrongPickPenaltySeconds: 20
   tableCapacity: 14
+  freePlacesToRestart: 2
   beltSpeed: 2.5
   blowerForce: 6
   trucks:

@@ -19,6 +19,9 @@ public class LandfillDaySettings : ScriptableObject
     [Tooltip("When this many items are on the sorting table, the belt and the truck stop")]
     public int tableCapacity = 14;
 
+    [Tooltip("After the table was full, the belt and the truck start again when this many places are free")]
+    public int freePlacesToRestart = 2;
+
     [Header("Line")]
     [Tooltip("How fast the belt moves, in world units per second")]
     public float beltSpeed = 2.5f;
