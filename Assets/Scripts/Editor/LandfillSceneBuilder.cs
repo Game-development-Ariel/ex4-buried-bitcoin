@@ -39,6 +39,7 @@ public static class LandfillSceneBuilder
 
         ConveyorBelt belt = CreateBelt(day);
         CreateWasteAndWalls(day);
+        CreateBorders(day);
         MachineSlot[] slots = CreateSlots(belt.GetComponent<Collider2D>());
         TruckDumper dumper = CreateDumper(day);
 
@@ -104,6 +105,28 @@ public static class LandfillSceneBuilder
         AddWall(parent, "Left Wall", new Vector2(-8.5f, 1f), new Vector2(0.2f, 7f));
         AddWall(parent, "Pit Wall", new Vector2(3.65f, -0.95f), new Vector2(0.3f, 3f));
         AddWall(parent, "Table Wall", new Vector2(8.4f, 0.4f), new Vector2(0.2f, 4.3f));
+    }
+
+    /// <summary>
+    /// Invisible waste piles far outside the screen. An item that flies over a wall would fall forever,
+    /// and if it is the target the day could never be won. Here it is buried like any other item.
+    /// </summary>
+    private static void CreateBorders(LandfillDaySettings day)
+    {
+        var parent = new GameObject("Borders").transform;
+        AddBorder(day, parent, "Bottom", new Vector2(0f, -9f), new Vector2(40f, 1f));
+        AddBorder(day, parent, "Top", new Vector2(0f, 11f), new Vector2(40f, 1f));
+        AddBorder(day, parent, "Left", new Vector2(-16f, 1f), new Vector2(1f, 20f));
+        AddBorder(day, parent, "Right", new Vector2(16f, 1f), new Vector2(1f, 20f));
+    }
+
+    private static void AddBorder(LandfillDaySettings day, Transform parent, string name, Vector2 center, Vector2 size)
+    {
+        var border = new GameObject(name + " Border");
+        border.transform.SetParent(parent, false);
+        border.transform.localPosition = center;
+        border.transform.localScale = new Vector3(size.x, size.y, 1f);
+        AddWastePile(day, border);
     }
 
     private static void AddWastePile(LandfillDaySettings day, GameObject box)
