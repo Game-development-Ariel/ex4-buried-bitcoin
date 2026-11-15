@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 /// <summary>
-/// Tools > Landfill > Build Scene: creates the whole sorting plant scene from code, with its prefabs and data.
+/// Creates the whole sorting plant scene from code, with its prefabs and data. Run it with Tools > Rebuild Scene.
 /// The view is from the side, so gravity does part of the sorting. Positions are in world units.
-/// Running it again rebuilds the scene from scratch.
+/// Running it again replaces the scene and the prefabs. The data assets keep their values (see LandfillAssets).
 /// </summary>
 public static class LandfillSceneBuilder
 {
@@ -28,7 +28,6 @@ public static class LandfillSceneBuilder
     private static readonly Color SignColor = new Color(1f, 0.85f, 0.4f, 0.55f);
     private static readonly Color LabelColor = new Color(0.8f, 0.78f, 0.72f);
 
-    [MenuItem("Tools/Build Scene Only")]
     public static void Build()
     {
         Directory.CreateDirectory(PrefabFolder);
